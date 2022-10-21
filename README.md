@@ -1,1 +1,1 @@
-# SoybeanGenVarX
+# Soybean Genomic Variations Explorer
