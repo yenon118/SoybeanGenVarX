@@ -11,7 +11,7 @@ include './php/pdoResultFilter.php';
 <?php
 $binding_tf_1 = $_GET['binding_tf_1'];
 $chromosome_1 = $_GET['chromosome_1'];
-$upstream_length_1 = 2000;
+$upstream_length_1 = $_GET['upstream_length_1'];
 
 if (is_string($binding_tf_1)) {
     $binding_tf_arr = preg_split("/[;, \n]+/", $binding_tf_1);
@@ -23,8 +23,6 @@ if (is_string($binding_tf_1)) {
     for ($i = 0; $i < count($binding_tf_arr); $i++) {
         $binding_tf_arr[$i] = trim($binding_tf_arr[$i]);
     }
-} else {
-    exit(0);
 }
 
 if (is_string($chromosome_1)) {
@@ -56,15 +54,17 @@ for ($i = 0; $i < count($binding_tf_arr); $i++) {
     $query_str = "
     SELECT M.Motif AS Binding_TF, TF.TF_Family, 
     MS.Chromosome AS Binding_Chromosome, MS.Start AS Binding_Start, MS.End AS Binding_End, MS.Sequence AS Gene_Binding_Sequence, 
-    M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description, 
-    GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position 
+    M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description
     FROM (
         SELECT Motif, Gene FROM mViz_Soybean_Motif 
         WHERE Motif = '" . $binding_tf_arr[$i] . "'
     ) AS M 
     LEFT JOIN mViz_Soybean_TF AS TF 
     ON M.Motif = TF.TF 
-    LEFT JOIN mViz_Soybean_Motif_Sequence AS MS 
+    LEFT JOIN (
+        SELECT Chromosome, Start, End, ID, Name, Sequence FROM mViz_Soybean_" . $chromosome . "_Motif_Sequence 
+        WHERE Name = '" . $binding_tf_arr[$i] . "'
+    ) AS MS 
     ON M.Motif = MS.Name 
     LEFT JOIN (
         SELECT ID, Name, Chromosome, Start, End, Strand, Gene_Description, 
@@ -80,12 +80,7 @@ for ($i = 0; $i < count($binding_tf_arr); $i++) {
         WHERE Chromosome = '" . $chromosome . "'
     ) AS GFF 
     ON ((M.Gene = GFF.ID) AND (MS.Chromosome = GFF.Chromosome) AND (MS.Start BETWEEN GFF.Promoter_Start AND GFF.Promoter_End)) 
-    LEFT JOIN (
-        SELECT DISTINCT Chromosome, Position FROM mViz_Soy1066_" . $chromosome . "_genotype_data
-    ) AS GD 
-    ON ((MS.Chromosome = GD.Chromosome) AND (GD.Position BETWEEN MS.Start AND MS.End))
     WHERE ((GFF.Chromosome = '" . $chromosome . "') AND (MS.Chromosome = GFF.Chromosome) AND (MS.Start BETWEEN GFF.Promoter_Start AND GFF.Promoter_End)) 
-    GROUP BY M.Motif, TF.TF_Family, MS.Chromosome, MS.Start, MS.End, MS.Sequence, M.Gene, GFF.Chromosome, GFF.Start, GFF.End, GFF.Strand, GFF.Gene_Description 
     ORDER BY MS.Chromosome, MS.Start;
     ";
 

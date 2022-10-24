@@ -10,7 +10,7 @@ include './php/pdoResultFilter.php';
 <!-- Get and process the variables -->
 <?php
 $gene_name_1 = $_GET['gene_name_1'];
-$upstream_length_1 = 2000;
+$upstream_length_1 = $_GET['upstream_length_1'];
 
 if (is_string($gene_name_1)) {
     $gene_arr = preg_split("/[;, \n]+/", $gene_name_1);
@@ -22,8 +22,6 @@ if (is_string($gene_name_1)) {
     for ($i = 0; $i < count($gene_arr); $i++) {
         $gene_arr[$i] = trim($gene_arr[$i]);
     }
-} else {
-    exit(0);
 }
 
 if (is_string($upstream_length_1)) {
@@ -80,8 +78,8 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
 for ($i = 0; $i < count($gene_result_arr); $i++) {
     // Display gene, gene region, and promoter region
     echo "<p><b>Queried Gene: </b>" . $gene_result_arr[$i]['Name'] . " (" . $gene_result_arr[$i]['Chromosome'] . ": " . $gene_result_arr[$i]['Start'] . " - " . $gene_result_arr[$i]['End'] . ") (" . $gene_result_arr[$i]['Strand'] . ")</p>";
-    // echo "<p><b>Promoter Region: </b>" . $gene_result_arr[$i]['Promoter_Start'] . " - " . $gene_result_arr[$i]['Promoter_End'] . "</p>";
-    // echo "<br />";
+    echo "<p><b>Promoter Region: </b>" . $gene_result_arr[$i]['Promoter_Start'] . " - " . $gene_result_arr[$i]['Promoter_End'] . "</p>";
+    echo "<br />";
 
     // Get binding TFs
     $query_str = "
@@ -89,7 +87,7 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
         SELECT Motif, Gene FROM mViz_Soybean_Motif WHERE Gene = '" . $gene_result_arr[$i]['Name'] . "'
     ) AS M
     INNER JOIN (
-        SELECT Chromosome, Start, End, Strand, Name, Sequence FROM mViz_Soybean_Motif_Sequence 
+        SELECT Chromosome, Start, End, Strand, Name, Sequence FROM mViz_Soybean_" . $gene_result_arr[$i]['Chromosome'] . "_Motif_Sequence 
         WHERE (Chromosome = '" . $gene_result_arr[$i]['Chromosome'] . "') 
         AND ((Start BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . " ) OR (End BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . "))
     ) AS MS

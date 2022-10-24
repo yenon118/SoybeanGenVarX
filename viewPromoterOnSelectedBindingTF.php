@@ -49,7 +49,7 @@ FROM (
 ) AS M 
 LEFT JOIN mViz_Soybean_TF AS TF 
 ON M.Motif = TF.TF 
-LEFT JOIN mViz_Soybean_Motif_Sequence AS MS 
+LEFT JOIN mViz_Soybean_" . $chromosome . "_Motif_Sequence AS MS 
 ON M.Motif = MS.Name 
 LEFT JOIN (
     SELECT ID, Name, Chromosome, Start, End, Strand, Gene_Description, 

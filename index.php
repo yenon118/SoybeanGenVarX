@@ -14,7 +14,11 @@ include '../header.php';
                     <h2>Search By Gene IDs</h2>
                     <br />
                     <label for="gene_name_1"><b>Gene IDs:</b> (eg Glyma.01G049100 Glyma.01G049200 Glyma.01G049300)</label>
-                    <textarea id="gene_name_1" name="gene_name_1" rows="12" cols="50" placeholder="&#10;Please separate each gene into a new line. &#10;&#10;Example:&#10;Glyma.01G049100&#10;Glyma.01G049200&#10;Glyma.01G049300"></textarea>
+                    <textarea id="gene_name_1" name="gene_name_1" rows="10" cols="50" placeholder="&#10;Please separate each gene into a new line. &#10;&#10;Example:&#10;Glyma.01G049100&#10;Glyma.01G049200&#10;Glyma.01G049300"></textarea>
+                    <br />
+                    <br />
+                    <label for="upstream_length_1"><b>Upstream length (bp):</b> (eg 2000)</label>
+                    <input type="text" id="upstream_length_1" name="upstream_length_1" size="60">
                     <br />
                     <br />
                     <input type="submit" value="Search">
@@ -25,7 +29,7 @@ include '../header.php';
                     <h2>Search By Binding TFs</h2>
                     <br />
                     <label for="binding_tf_1"><b>Binding TFs:</b> (eg Glyma.01G005500 Glyma.01G022500 Glyma.01G023500)</label>
-                    <textarea id="binding_tf_1" name="binding_tf_1" rows="10" cols="50" placeholder="&#10;Please separate each gene into a new line. &#10;&#10;Example:&#10;Glyma.01G005500&#10;Glyma.01G022500&#10;Glyma.01G023500"></textarea>
+                    <textarea id="binding_tf_1" name="binding_tf_1" rows="8" cols="50" placeholder="&#10;Please separate each gene into a new line. &#10;&#10;Example:&#10;Glyma.01G005500&#10;Glyma.01G022500&#10;Glyma.01G023500"></textarea>
                     <br />
                     <br />
                     <label for="chromosome_1"><b>Gene Binding Chromosome:</b></label>
@@ -53,6 +57,10 @@ include '../header.php';
                     </select>
                     <br />
                     <br />
+                    <label for="upstream_length_1"><b>Upstream length (bp):</b> (eg 2000)</label>
+                    <input type="text" id="upstream_length_1" name="upstream_length_1" size="60">
+                    <br />
+                    <br />
                     <input type="submit" value="Search">
                 </form>
             </td>
@@ -71,7 +79,7 @@ include '../header.php';
                 <form action="viewAllCNVByGenes.php" method="get" target="_blank">
                     <h2>Search by Gene IDs</h2>
                     <br />
-                    <label for="gene_id_2"><b>Gene IDs</b><span>&nbsp;(eg Glyma.01G000100 Glyma.02G001700 Glyma.03G018100)</span></label>
+                    <label for="gene_id_2"><b>Gene IDs:</b><span>&nbsp;(eg Glyma.01G000100 Glyma.02G001700 Glyma.03G018100)</span></label>
                     <textarea id="gene_id_2" name="gene_id_2" rows="12" cols="50" placeholder="&#10;Please separate each gene into a new line. &#10;&#10;Example:&#10;Glyma.01G000100&#10;Glyma.02G001700&#10;Glyma.03G018100"></textarea>
                     <br />
                     <br />
