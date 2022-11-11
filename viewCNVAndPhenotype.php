@@ -185,7 +185,7 @@ echo "<button onclick=\"uncheck_all_phenotypes()\" style=\"margin-right:20px;\">
 echo "<button onclick=\"check_all_phenotypes()\" style=\"margin-right:20px;\">Check All Phenotypes</button>";
 // echo "<button onclick=\"uncheck_all()\" style=\"margin-right:20px;\">Uncheck All (CNs and Phenotypes)</button>";
 // echo "<button onclick=\"check_all()\" style=\"margin-right:20px;\">Check All (CNs and Phenotypes)</button>";
-echo "<button onclick=\"qeuryCNVAndPhenotype()\" style=\"margin-right:20px;\">View Data</button>";
+echo "<button onclick=\"queryCNVAndPhenotype()\" style=\"margin-right:20px;\">View Data</button>";
 echo "<button onclick=\"downloadCNVAndPhenotype()\" style=\"margin-right:20px;\">Download Data</button>";
 echo "</div>";
 echo "<br/><br/>";

@@ -46,7 +46,7 @@ $data_option = trim($data_option);
 
     if (chromosome && position_start && position_end && data_option) {
         $.ajax({
-            url: './php/qeuryCNVAndImprovementStatus.php',
+            url: './php/queryCNVAndImprovementStatus.php',
             type: 'GET',
             contentType: 'application/json',
             data: {

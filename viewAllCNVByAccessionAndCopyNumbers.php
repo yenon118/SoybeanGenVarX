@@ -52,8 +52,8 @@ if ($cnv_data_option_2 == "Individual_Hits") {
 }
 $query_str = $query_str . "AS CNV ";
 $query_str = $query_str . "LEFT JOIN soykb.mViz_Soybean_Accession_Mapping AS AM ";
-$query_str = $query_str . "ON CNV.Accession = AM.Accession ";
-$query_str = $query_str . "WHERE ((AM.SoyKB_Accession = '" . $accession_2 . "') OR (AM.GRIN_Accession = '" . $accession_2 . "')) AND (CNV.CN IN ('";
+$query_str = $query_str . "ON BINARY CNV.Accession = AM.Accession ";
+$query_str = $query_str . "WHERE ((AM.SoyKB_Accession = BINARY '" . $accession_2 . "') OR (AM.GRIN_Accession = BINARY '" . $accession_2 . "')) AND (CNV.CN IN ('";
 for ($i = 0; $i < count($copy_number_arr); $i++) {
     if($i < (count($copy_number_arr)-1)){
         $query_str = $query_str . trim($copy_number_arr[$i]) . "', '";

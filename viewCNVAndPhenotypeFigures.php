@@ -88,7 +88,7 @@ echo "<br /><br />";
 
     if (chromosome && position_start && position_end && data_option && phenotype && cn_array.length > 0) {
         $.ajax({
-            url: './php/qeuryCNVAndPhenotypeFigures.php',
+            url: './php/queryCNVAndPhenotypeFigures.php',
             type: 'GET',
             contentType: 'application/json',
             data: {

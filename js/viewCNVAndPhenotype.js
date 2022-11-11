@@ -181,7 +181,7 @@ function constructInfoTable(res, chromosome, position_start, position_end, cnv_d
 }
 
 
-function qeuryCNVAndPhenotype() {
+function queryCNVAndPhenotype() {
 
     // Clear data appended to the div tags, if there is any
     if (document.getElementById('CNV_and_Phenotye_detail_table').innerHTML) {
@@ -214,7 +214,7 @@ function qeuryCNVAndPhenotype() {
 
     if (chromosome_1 && position_start_1 && position_end_1 && cn_array.length > 0) {
         $.ajax({
-            url: './php/qeuryCNVAndPhenotype.php',
+            url: './php/queryCNVAndPhenotype.php',
             type: 'GET',
             contentType: 'application/json',
             data: {
@@ -284,7 +284,7 @@ function downloadCNVAndPhenotype() {
 
     if (chromosome_1 && position_start_1 && position_end_1 && cn_array.length > 0) {
         $.ajax({
-            url: './php/qeuryCNVAndPhenotype.php',
+            url: './php/queryCNVAndPhenotype.php',
             type: 'GET',
             contentType: 'application/json',
             data: {

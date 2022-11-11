@@ -76,7 +76,7 @@ echo "<br /><br />";
 
     if (chromosome && position && genotype_array.length > 0 && phenotype) {
         $.ajax({
-            url: './php/qeuryVariantAndPhenotypeFigures.php',
+            url: './php/queryVariantAndPhenotypeFigures.php',
             type: 'GET',
             contentType: 'application/json',
             data: {

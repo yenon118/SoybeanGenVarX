@@ -6,7 +6,7 @@ function updateGenotypeInAccordion(genotype) {
 
     if (chromosome_1 && position_1) {
         $.ajax({
-            url: './php/qeuryDistinctGenotypesAtCoordinate.php',
+            url: './php/queryDistinctGenotypesAtCoordinate.php',
             type: 'GET',
             contentType: 'application/json',
             data: {
@@ -171,7 +171,7 @@ function constructInfoTable(res, chromosome, position, genotype_array) {
 }
 
 
-function qeuryVariantAndPhenotype() {
+function queryVariantAndPhenotype() {
 
     // Clear data appended to the div tags, if there is any
     if (document.getElementById('Variant_and_Phenotye_detail_table').innerHTML) {
@@ -201,7 +201,7 @@ function qeuryVariantAndPhenotype() {
 
     if (chromosome_1 && position_1 && genotype_array.length > 0) {
         $.ajax({
-            url: './php/qeuryVariantAndPhenotype.php',
+            url: './php/queryVariantAndPhenotype.php',
             type: 'GET',
             contentType: 'application/json',
             data: {
@@ -266,7 +266,7 @@ function downloadVariantAndPhenotype() {
 
     if (chromosome_1 && position_1 && genotype_array.length > 0) {
         $.ajax({
-            url: './php/qeuryVariantAndPhenotype.php',
+            url: './php/queryVariantAndPhenotype.php',
             type: 'GET',
             contentType: 'application/json',
             data: {

@@ -41,9 +41,9 @@ for ($i = 0; $i < count($phenotype_array); $i++) {
 }
 $query_str = $query_str . "FROM soykb.mViz_Soy1066_" . $chromosome . "_genotype_data AS G ";
 $query_str = $query_str . "LEFT JOIN soykb.mViz_Soybean_Accession_Mapping AS M ";
-$query_str = $query_str . "ON G.Accession = M.SoyKB_Accession ";
+$query_str = $query_str . "ON BINARY G.Accession = M.SoyKB_Accession ";
 $query_str = $query_str . "LEFT JOIN soykb.germplasm AS PH ";
-$query_str = $query_str . "ON M.GRIN_Accession = PH.ACNO ";
+$query_str = $query_str . "ON BINARY M.GRIN_Accession = PH.ACNO ";
 $query_str = $query_str . "WHERE (G.Chromosome = '" . $chromosome . "') ";
 $query_str = $query_str . "AND (G.Position = " . $position . ") ";
 if (count($genotype_array) > 0) {
