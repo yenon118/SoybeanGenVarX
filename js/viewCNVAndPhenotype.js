@@ -91,7 +91,7 @@ function check_all_cn() {
 
 
 function uncheck_all_phenotypes() {
-    let ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
+    let ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=nematode_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
 
     for (let i = 0; i < ids.length; i++) {
         if (ids[i].checked) {
@@ -102,7 +102,7 @@ function uncheck_all_phenotypes() {
 
 
 function check_all_phenotypes() {
-    let ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
+    let ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=nematode_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
 
     for (let i = 0; i < ids.length; i++) {
         if (!ids[i].checked) {
@@ -113,7 +113,7 @@ function check_all_phenotypes() {
 
 
 function uncheck_all() {
-    let ids = document.querySelectorAll('input[id^=CN],input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
+    let ids = document.querySelectorAll('input[id^=CN],input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=nematode_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
 
     for (let i = 0; i < ids.length; i++) {
         if (ids[i].checked) {
@@ -124,7 +124,7 @@ function uncheck_all() {
 
 
 function check_all() {
-    let ids = document.querySelectorAll('input[id^=CN],input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
+    let ids = document.querySelectorAll('input[id^=CN],input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=nematode_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
 
     for (let i = 0; i < ids.length; i++) {
         if (!ids[i].checked) {
@@ -196,7 +196,7 @@ function queryCNVAndPhenotype() {
     let cn_ids = document.querySelectorAll('input[id^=CN]');
     let cn_array = [];
 
-    let phenotype_ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
+    let phenotype_ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=nematode_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
     let phenotype_array = [];
 
     for (let i = 0; i < cn_ids.length; i++) {
@@ -266,7 +266,7 @@ function downloadCNVAndPhenotype() {
     let cn_ids = document.querySelectorAll('input[id^=CN]');
     let cn_array = [];
 
-    let phenotype_ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
+    let phenotype_ids = document.querySelectorAll('input[id^=chemical_descriptor_],input[id^=disease_descriptor_],input[id^=growth_descriptor_],input[id^=insect_descriptor_],input[id^=morphology_descriptor_],input[id^=other_descriptor_],input[id^=nematode_descriptor_],input[id^=phenology_descriptor_],input[id^=qualifier_],input[id^=stress_descriptor_]');
     let phenotype_array = [];
 
     for (let i = 0; i < cn_ids.length; i++) {

@@ -30,7 +30,7 @@ if ($data_option == "Individual_Hits") {
 $query_str = $query_str . "AS CNV ";
 $query_str = $query_str . "LEFT JOIN soykb.mViz_Soybean_Accession_Mapping AS AM ";
 $query_str = $query_str . "ON BINARY CNV.Accession = AM.Accession ";
-$query_str = $query_str . "LEFT JOIN soykb.germplasm AS G ";
+$query_str = $query_str . "LEFT JOIN soykb.mViz_Soybean_Phenotype_Data AS G ";
 $query_str = $query_str . "ON BINARY AM.GRIN_Accession = G.ACNO ";
 $query_str = $query_str . "WHERE (CNV.Chromosome = '" . $chromosome . "') ";
 $query_str = $query_str . "AND (CNV.Start BETWEEN " . $position_start . " AND " . $position_end . ") ";
