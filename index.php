@@ -113,7 +113,7 @@ include '../header.php';
                     <br />
                     <br />
                     <input type="submit" value="Search">
-                </form>    
+                </form>
             </td>
         </tr>
         <tr>
@@ -163,7 +163,7 @@ include '../header.php';
                     <br />
                     <br />
                     <input type="submit" value="Search">
-                </form>    
+                </form>
             </td>
             <td width="50%" align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
                 <form action="viewAllTransposableElementsByElements.php" method="get" target="_blank">
@@ -174,7 +174,7 @@ include '../header.php';
                     <br />
                     <br />
                     <input type="submit" value="Search">
-                </form>    
+                </form>
             </td>
         </tr>
         <tr>
@@ -195,7 +195,7 @@ include '../header.php';
                     <br />
                     <br />
                     <input type="submit" value="Search">
-                </form>    
+                </form>
             </td>
         </tr> -->
     </table>
@@ -203,6 +203,22 @@ include '../header.php';
     <br />
 </div>
 
+<hr />
+
+<br />
+<br />
+
+<div>
+    <table width="100%" cellspacing="14" cellpadding="14">
+        <tr>
+            <td align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
+                <h2>If you use the Soybean Genomic Variations Explorer in your work, please cite:</h2>
+                <br />
+                <p> Chan YO, Biova J, Mahmood A, Dietz N, Bilyeu K, Škrabišová M, Joshi T: <b> Genomic Variations Explorer (GenVarX): A Toolset for Annotating Promoter and CNV Regions Using Genotypic and Phenotypic Differences. </b> Frontiers in Genetics 2023, In Press. </p>
+            </td>
+        </tr>
+    </table>
+</div>
 
 <script type="text/javascript" language="javascript">
 </script>
