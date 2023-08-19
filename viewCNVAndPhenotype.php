@@ -189,14 +189,14 @@ echo "</div>";
 
 echo "<br/><br/>";
 echo "<div style='margin-top:10px;' align='center'>";
-echo "<button onclick=\"uncheck_all_cn()\" style=\"margin-right:20px;\">Uncheck All CNs</button>";
-echo "<button onclick=\"check_all_cn()\" style=\"margin-right:20px;\">Check All CNs</button>";
-echo "<button onclick=\"uncheck_all_phenotypes()\" style=\"margin-right:20px;\">Uncheck All Phenotypes</button>";
-echo "<button onclick=\"check_all_phenotypes()\" style=\"margin-right:20px;\">Check All Phenotypes</button>";
-// echo "<button onclick=\"uncheck_all()\" style=\"margin-right:20px;\">Uncheck All (CNs and Phenotypes)</button>";
-// echo "<button onclick=\"check_all()\" style=\"margin-right:20px;\">Check All (CNs and Phenotypes)</button>";
-echo "<button onclick=\"queryCNVAndPhenotype()\" style=\"margin-right:20px;\">View Data</button>";
-echo "<button onclick=\"downloadCNVAndPhenotype()\" style=\"margin-right:20px;\">Download Data</button>";
+echo "<button onclick=\"uncheck_all_cn()\" style=\"margin-right:20px; background-color:#FFFFFF;\">Uncheck All CNs</button>";
+echo "<button onclick=\"check_all_cn()\" style=\"margin-right:20px; background-color:#FFFFFF;\">Check All CNs</button>";
+echo "<button onclick=\"uncheck_all_phenotypes()\" style=\"margin-right:20px; background-color:#FFFFFF;\">Uncheck All Phenotypes</button>";
+echo "<button onclick=\"check_all_phenotypes()\" style=\"margin-right:20px; background-color:#FFFFFF;\">Check All Phenotypes</button>";
+// echo "<button onclick=\"uncheck_all()\" style=\"margin-right:20px; background-color:#FFFFFF;\">Uncheck All (CNs and Phenotypes)</button>";
+// echo "<button onclick=\"check_all()\" style=\"margin-right:20px; background-color:#FFFFFF;\">Check All (CNs and Phenotypes)</button>";
+echo "<button onclick=\"queryCNVAndPhenotype()\" style=\"margin-right:20px; background-color:#DDFFDD;\">View Data</button>";
+echo "<button onclick=\"downloadCNVAndPhenotype()\" style=\"margin-right:20px; background-color:#FFFFFF;\">Download Data</button>";
 echo "</div>";
 echo "<br/><br/>";
 
