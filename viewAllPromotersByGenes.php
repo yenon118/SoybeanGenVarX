@@ -84,23 +84,51 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
     echo "<br />";
 
     // Get binding TFs
+    // $query_str = "
+    // SELECT M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, MS.Name AS Binding_TF, TF.TF_Family, MS.Sequence AS Gene_Binding_Sequence, GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position FROM (
+    //     SELECT Motif, Gene FROM mViz_Soybean_Motif WHERE Gene = '" . $gene_result_arr[$i]['Name'] . "'
+    // ) AS M
+    // INNER JOIN (
+    //     SELECT Chromosome, Start, End, Strand, Name, Sequence FROM mViz_Soybean_" . $gene_result_arr[$i]['Chromosome'] . "_Motif_Sequence
+    //     WHERE (Chromosome = '" . $gene_result_arr[$i]['Chromosome'] . "')
+    //     AND (
+    //         (Start BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . " )
+    //         OR
+    //         (End BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . ")
+    //     )
+    // ) AS MS
+    // ON M.Motif = MS.Name
+    // LEFT JOIN mViz_Soybean_TF AS TF ON MS.Name = TF.TF
+    // LEFT JOIN (
+    //     SELECT DISTINCT Position FROM mViz_Soy1066_" . $gene_result_arr[$i]['Chromosome'] . "_genotype_data
+    //     WHERE (Position BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . ")
+    // ) AS GD
+    // ON (GD.Position BETWEEN MS.Start AND MS.End)
+    // GROUP BY M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, Binding_TF, TF.TF_Family, Gene_Binding_Sequence
+    // ORDER BY Start, End;
+    // ";
+
+    // Get binding TFs (Optimized MySQL query string)
     $query_str = "
-    SELECT M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, MS.Name AS Binding_TF, TF.TF_Family, MS.Sequence AS Gene_Binding_Sequence, GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position FROM (
-        SELECT Motif, Gene FROM mViz_Soybean_Motif WHERE Gene = '" . $gene_result_arr[$i]['Name'] . "'
-    ) AS M
-    INNER JOIN (
-        SELECT Chromosome, Start, End, Strand, Name, Sequence FROM mViz_Soybean_" . $gene_result_arr[$i]['Chromosome'] . "_Motif_Sequence 
-        WHERE (Chromosome = '" . $gene_result_arr[$i]['Chromosome'] . "') 
-        AND ((Start BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . " ) OR (End BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . "))
-    ) AS MS
+    SELECT M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, MS.Name AS Binding_TF, TF.TF_Family,
+    MS.Sequence AS Gene_Binding_Sequence, GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position
+    FROM mViz_Soybean_Motif AS M
+    INNER JOIN mViz_Soybean_" . $gene_result_arr[$i]['Chromosome'] . "_Motif_Sequence AS MS
     ON M.Motif = MS.Name
-    LEFT JOIN mViz_Soybean_TF AS TF ON MS.Name = TF.TF 
-    LEFT JOIN (
-        SELECT DISTINCT Position FROM mViz_Soy1066_" . $gene_result_arr[$i]['Chromosome'] . "_genotype_data 
-        WHERE (Position BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . ") 
-    ) AS GD 
-    ON (GD.Position BETWEEN MS.Start AND MS.End) 
-    GROUP BY M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, Binding_TF, TF.TF_Family, Gene_Binding_Sequence 
+    LEFT JOIN mViz_Soybean_TF AS TF
+    ON MS.Name = TF.TF LEFT JOIN (
+        SELECT DISTINCT Position
+        FROM mViz_Soy1066_" . $gene_result_arr[$i]['Chromosome'] . "_genotype_data
+        WHERE (Position BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . ")
+    ) AS GD
+    ON (GD.Position BETWEEN MS.Start AND MS.End)
+    WHERE (M.Gene = '" . $gene_result_arr[$i]['Name'] . "') AND (MS.Chromosome = '" . $gene_result_arr[$i]['Chromosome'] . "')
+    AND (
+        (MS.Start BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . " )
+        OR
+        (MS.End BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . ")
+    )
+    GROUP BY M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, Binding_TF, TF.TF_Family, Gene_Binding_Sequence
     ORDER BY Start, End;
     ";
 
@@ -113,7 +141,7 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
     if (isset($motif_result_arr) && !empty($motif_result_arr)){
         echo "<div style='width:auto; height:auto; overflow:scroll; max-height:1000px;'>";
         echo "<table style='text-align:center; border:3px solid #000;'>";
-        
+
         // Table header
         echo "<tr>";
         foreach ($motif_result_arr[0] as $key => $value) {
