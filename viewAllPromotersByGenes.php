@@ -85,7 +85,8 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
 
     // Get binding TFs
     // $query_str = "
-    // SELECT M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, MS.Name AS Binding_TF, TF.TF_Family, MS.Sequence AS Gene_Binding_Sequence, GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position FROM (
+    // SELECT M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, MS.Name AS Binding_TF, TF.TF_Family,
+    // MS.Sequence AS Gene_Binding_Sequence, GROUP_CONCAT(DISTINCT GD.Position SEPARATOR ', ') AS Variant_Position FROM (
     //     SELECT Motif, Gene FROM mViz_Soybean_Motif WHERE Gene = '" . $gene_result_arr[$i]['Name'] . "'
     // ) AS M
     // INNER JOIN (
@@ -98,7 +99,8 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
     //     )
     // ) AS MS
     // ON M.Motif = MS.Name
-    // LEFT JOIN mViz_Soybean_TF AS TF ON MS.Name = TF.TF
+    // LEFT JOIN mViz_Soybean_TF AS TF
+    // ON MS.Name = TF.TF
     // LEFT JOIN (
     //     SELECT DISTINCT Position FROM mViz_Soy1066_" . $gene_result_arr[$i]['Chromosome'] . "_genotype_data
     //     WHERE (Position BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . ")
@@ -111,12 +113,13 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
     // Get binding TFs (Optimized MySQL query string)
     $query_str = "
     SELECT M.Gene, MS.Chromosome, MS.Start, MS.End, MS.Strand, MS.Name AS Binding_TF, TF.TF_Family,
-    MS.Sequence AS Gene_Binding_Sequence, GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position
+    MS.Sequence AS Gene_Binding_Sequence, GROUP_CONCAT(DISTINCT GD.Position SEPARATOR ', ') AS Variant_Position
     FROM mViz_Soybean_Motif AS M
     INNER JOIN mViz_Soybean_" . $gene_result_arr[$i]['Chromosome'] . "_Motif_Sequence AS MS
     ON M.Motif = MS.Name
     LEFT JOIN mViz_Soybean_TF AS TF
-    ON MS.Name = TF.TF LEFT JOIN (
+    ON MS.Name = TF.TF
+    LEFT JOIN (
         SELECT DISTINCT Position
         FROM mViz_Soy1066_" . $gene_result_arr[$i]['Chromosome'] . "_genotype_data
         WHERE (Position BETWEEN " . $gene_result_arr[$i]['Promoter_Start'] . " AND " . $gene_result_arr[$i]['Promoter_End'] . ")

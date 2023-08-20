@@ -39,72 +39,74 @@ if (is_string($motif_end)) {
 
 // Get binding TF
 // $query_str = "
-// SELECT M.Motif AS Binding_TF, TF.TF_Family, 
-// MS.Chromosome AS Binding_Chromosome, MS.Start AS Binding_Start, MS.End AS Binding_End, MS.Sequence AS Gene_Binding_Sequence, 
-// M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description, 
-// GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position 
+// SELECT M.Motif AS Binding_TF, TF.TF_Family,
+// MS.Chromosome AS Binding_Chromosome, MS.Start AS Binding_Start, MS.End AS Binding_End, MS.Sequence AS Gene_Binding_Sequence,
+// M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description,
+// GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position
 // FROM (
-//     SELECT Motif, Gene FROM mViz_Soybean_Motif 
+//     SELECT Motif, Gene FROM mViz_Soybean_Motif
 //     WHERE ((Motif = '" . $motif . "') AND (Gene = '" . $gene . "'))
-// ) AS M 
-// LEFT JOIN mViz_Soybean_TF AS TF 
-// ON M.Motif = TF.TF 
-// LEFT JOIN mViz_Soybean_" . $chromosome . "_Motif_Sequence AS MS 
-// ON M.Motif = MS.Name 
+// ) AS M
+// LEFT JOIN mViz_Soybean_TF AS TF
+// ON M.Motif = TF.TF
+// LEFT JOIN mViz_Soybean_" . $chromosome . "_Motif_Sequence AS MS
+// ON M.Motif = MS.Name
 // LEFT JOIN (
-//     SELECT ID, Name, Chromosome, Start, End, Strand, Gene_Description, 
+//     SELECT ID, Name, Chromosome, Start, End, Strand, Gene_Description,
 //     CASE Strand
 //         WHEN '+' THEN Start-1-" . $upstream_length . "
 //         ELSE End+1
-//     END AS Promoter_Start, 
+//     END AS Promoter_Start,
 //     CASE Strand
 //         WHEN '+' THEN Start-1
 //         ELSE End+1+" . $upstream_length . "
-//     END AS Promoter_End 
-//     FROM mViz_Soybean_GFF 
-// ) AS GFF 
-// ON ((M.Gene = GFF.ID) AND (MS.Chromosome = GFF.Chromosome) AND (MS.Start BETWEEN GFF.Promoter_Start AND GFF.Promoter_End)) 
+//     END AS Promoter_End
+//     FROM mViz_Soybean_GFF
+// ) AS GFF
+// ON ((M.Gene = GFF.ID) AND (MS.Chromosome = GFF.Chromosome) AND (MS.Start BETWEEN GFF.Promoter_Start AND GFF.Promoter_End))
 // LEFT JOIN (
 //     SELECT DISTINCT Chromosome, Position FROM mViz_Soy1066_" . $chromosome . "_genotype_data
-// ) AS GD 
+// ) AS GD
 // ON ((MS.Chromosome = GD.Chromosome) AND (GD.Position BETWEEN MS.Start AND MS.End))
-// WHERE ((GFF.Chromosome = '" . $chromosome . "') AND (MS.Start = " . $motif_start . ") AND (MS.End = " . $motif_end . ")) 
-// GROUP BY M.Motif, TF.TF_Family, MS.Chromosome, MS.Start, MS.End, MS.Sequence, M.Gene, GFF.Chromosome, GFF.Start, GFF.End, GFF.Strand, GFF.Gene_Description 
-// ORDER BY MS.Chromosome, MS.Start;
+// WHERE ((GFF.Chromosome = '" . $chromosome . "') AND (MS.Start = " . $motif_start . ") AND (MS.End = " . $motif_end . "))
+// GROUP BY M.Motif, TF.TF_Family, MS.Chromosome, MS.Start, MS.End, MS.Sequence, M.Gene, GFF.Chromosome, GFF.Start, GFF.End, GFF.Strand, GFF.Gene_Description
+// ORDER BY MS.Chromosome, MS.Start
+// LIMIT 1;
 // ";
 
 // Get binding TF (Optimized MySQL query string)
 $query_str = "
-SELECT M.Motif AS Binding_TF, TF.TF_Family, 
-MS.Chromosome AS Binding_Chromosome, MS.Start AS Binding_Start, MS.End AS Binding_End, MS.Sequence AS Gene_Binding_Sequence, 
-M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description, 
-GROUP_CONCAT(DISTINCT GD.Position SEPARATOR ', ') AS Variant_Position 
+SELECT M.Motif AS Binding_TF, TF.TF_Family,
+MS.Chromosome AS Binding_Chromosome, MS.Start AS Binding_Start, MS.End AS Binding_End, MS.Sequence AS Gene_Binding_Sequence,
+M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description,
+GROUP_CONCAT(DISTINCT GD.Position SEPARATOR ', ') AS Variant_Position
 FROM (
-    SELECT Motif, Gene FROM mViz_Soybean_Motif 
+    SELECT Motif, Gene FROM mViz_Soybean_Motif
     WHERE ((Motif = '" . $motif . "') AND (Gene = '" . $gene . "'))
-) AS M 
-LEFT JOIN mViz_Soybean_TF AS TF 
-ON M.Motif = TF.TF 
-LEFT JOIN mViz_Soybean_" . $chromosome . "_Motif_Sequence AS MS 
-ON M.Motif = MS.Name 
+) AS M
+LEFT JOIN mViz_Soybean_TF AS TF
+ON M.Motif = TF.TF
+LEFT JOIN mViz_Soybean_" . $chromosome . "_Motif_Sequence AS MS
+ON M.Motif = MS.Name
 LEFT JOIN (
-    SELECT ID, Name, Chromosome, Start, End, Strand, Gene_Description, 
+    SELECT ID, Name, Chromosome, Start, End, Strand, Gene_Description,
     CASE Strand
         WHEN '+' THEN Start-1-" . $upstream_length . "
         ELSE End+1
-    END AS Promoter_Start, 
+    END AS Promoter_Start,
     CASE Strand
         WHEN '+' THEN Start-1
         ELSE End+1+" . $upstream_length . "
-    END AS Promoter_End 
-    FROM mViz_Soybean_GFF 
-) AS GFF 
-ON ((M.Gene = GFF.ID) AND (MS.Chromosome = GFF.Chromosome) AND (MS.Start BETWEEN GFF.Promoter_Start AND GFF.Promoter_End)) 
-LEFT JOIN mViz_Soy1066_" . $chromosome . "_genotype_data AS GD 
+    END AS Promoter_End
+    FROM mViz_Soybean_GFF
+) AS GFF
+ON ((M.Gene = GFF.ID) AND (MS.Chromosome = GFF.Chromosome) AND (MS.Start BETWEEN GFF.Promoter_Start AND GFF.Promoter_End))
+LEFT JOIN mViz_Soy1066_" . $chromosome . "_genotype_data AS GD
 ON ((MS.Chromosome = GD.Chromosome) AND (GD.Position BETWEEN MS.Start AND MS.End))
-WHERE ((GFF.Chromosome = '" . $chromosome . "') AND (MS.Start = " . $motif_start . ") AND (MS.End = " . $motif_end . ")) 
-GROUP BY M.Motif, TF.TF_Family, MS.Chromosome, MS.Start, MS.End, MS.Sequence, M.Gene, GFF.Chromosome, GFF.Start, GFF.End, GFF.Strand, GFF.Gene_Description 
-ORDER BY MS.Chromosome, MS.Start;
+WHERE ((GFF.Chromosome = '" . $chromosome . "') AND (MS.Start = " . $motif_start . ") AND (MS.End = " . $motif_end . "))
+GROUP BY M.Motif, TF.TF_Family, MS.Chromosome, MS.Start, MS.End, MS.Sequence, M.Gene, GFF.Chromosome, GFF.Start, GFF.End, GFF.Strand, GFF.Gene_Description
+ORDER BY MS.Chromosome, MS.Start
+LIMIT 1;
 ";
 
 $stmt = $PDO->prepare($query_str);
@@ -121,7 +123,7 @@ if (isset($motif_result_arr) && !empty($motif_result_arr)){
     echo "<br />";
     echo "<div style='width:auto; height:auto; overflow:scroll; max-height:1000px;'>";
     echo "<table style='text-align:center; border:3px solid #000;'>";
-    
+
     // Table header
     echo "<tr>";
     foreach ($motif_result_arr[0] as $key => $value) {

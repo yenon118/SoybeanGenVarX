@@ -105,7 +105,7 @@ for ($i = 0; $i < count($binding_tf_arr); $i++) {
         WHERE Chromosome = '" . $chromosome . "'
     ) AS GFF
     ON ((M.Gene = GFF.ID) AND (MS.Chromosome = GFF.Chromosome) AND (MS.Start BETWEEN GFF.Promoter_Start AND GFF.Promoter_End))
-    WHERE (MS.Chromosome = '" . $chromosome . "') AND (GFF.Chromosome = '" . $chromosome . "') AND (TF.TF = '" . $binding_tf_arr[$i] . "') AND (MS.Name = '" . $binding_tf_arr[$i] . "')
+    WHERE (MS.Chromosome = '" . $chromosome . "') AND (GFF.Chromosome = '" . $chromosome . "') AND (M.Motif = '" . $binding_tf_arr[$i] . "') AND (MS.Name = '" . $binding_tf_arr[$i] . "')
     ORDER BY MS.Chromosome, MS.Start;
     ";
 
