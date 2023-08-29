@@ -203,6 +203,10 @@ include '../header.php';
     <br />
 </div>
 
+<div style="margin-bottom:40px;" align="center">
+    <button onclick="downloadUserManual()" style="margin-right:20px;">Download User Manual</button>
+</div>
+
 <hr />
 
 <br />
@@ -219,6 +223,8 @@ include '../header.php';
         </tr>
     </table>
 </div>
+
+<script type="text/javascript" language="javascript" src="./js/index.js"></script>
 
 <script type="text/javascript" language="javascript">
 </script>
