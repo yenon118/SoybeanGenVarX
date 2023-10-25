@@ -34,7 +34,7 @@ if (is_string($phenotype)) {
 
 // Construct query string
 $query_str = "SELECT G.Chromosome, G.Position, G.Accession, M.GRIN_Accession, M.Improvement_Status, M.Classification, G.Genotype, ";
-$query_str = $query_str . "CASE G.Functional_Effect WHEN 'Ref' THEN 'Ref' ELSE 'Alt' END AS Category, ";
+$query_str = $query_str . "G.Category, ";
 $query_str = $query_str . "G.Imputation ";
 for ($i = 0; $i < count($phenotype_array); $i++) {
     $query_str = $query_str . ", PH." . $phenotype_array[$i] . " ";
