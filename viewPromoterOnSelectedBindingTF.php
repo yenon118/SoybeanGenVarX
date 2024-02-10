@@ -42,7 +42,7 @@ if (is_string($motif_end)) {
 // SELECT M.Motif AS Binding_TF, TF.TF_Family,
 // MS.Chromosome AS Binding_Chromosome, MS.Start AS Binding_Start, MS.End AS Binding_End, MS.Sequence AS Gene_Binding_Sequence,
 // M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description,
-// GROUP_CONCAT(GD.Position SEPARATOR ', ') AS Variant_Position
+// GROUP_CONCAT(GD.Position ORDER BY GD.Position ASC SEPARATOR ', ') AS Variant_Position
 // FROM (
 //     SELECT Motif, Gene FROM mViz_Soybean_Motif
 //     WHERE ((Motif = '" . $motif . "') AND (Gene = '" . $gene . "'))
@@ -79,7 +79,7 @@ $query_str = "
 SELECT M.Motif AS Binding_TF, TF.TF_Family,
 MS.Chromosome AS Binding_Chromosome, MS.Start AS Binding_Start, MS.End AS Binding_End, MS.Sequence AS Gene_Binding_Sequence,
 M.Gene, GFF.Chromosome, GFF.Start AS Gene_Start, GFF.End AS Gene_End, GFF.Strand AS Gene_Strand, GFF.Gene_Description,
-GROUP_CONCAT(DISTINCT GD.Position SEPARATOR ', ') AS Variant_Position
+GROUP_CONCAT(DISTINCT GD.Position ORDER BY GD.Position ASC SEPARATOR ', ') AS Variant_Position
 FROM (
     SELECT Motif, Gene FROM mViz_Soybean_Motif
     WHERE ((Motif = '" . $motif . "') AND (Gene = '" . $gene . "'))
