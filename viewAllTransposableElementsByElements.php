@@ -13,14 +13,20 @@ include './php/pdoResultFilter.php';
 $element_3 = $_GET['element_3'];
 
 if (is_string($element_3)) {
-    $element_arr = preg_split("/[;, \n]+/", trim($element_3));
-    for ($i = 0; $i < count($element_arr); $i++) {
-        $element_arr[$i] = trim($element_arr[$i]);
+    $temp_element_arr = preg_split("/[;, \n]+/", trim($element_3));
+    $element_arr = array();
+    for ($i = 0; $i < count($temp_element_arr); $i++) {
+        if (!empty(trim($temp_element_arr[$i]))) {
+            array_push($element_arr, trim($temp_element_arr[$i]));
+        }
     }
 } elseif (is_array($element_3)) {
-    $element_arr = $element_3;
-    for ($i = 0; $i < count($element_arr); $i++) {
-        $element_arr[$i] = trim($element_arr[$i]);
+    $temp_element_arr = $element_3;
+    $element_arr = array();
+    for ($i = 0; $i < count($temp_element_arr); $i++) {
+        if (!empty(trim($temp_element_arr[$i]))) {
+            array_push($element_arr, trim($temp_element_arr[$i]));
+        }
     }
 } else {
     exit(0);

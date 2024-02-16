@@ -14,14 +14,20 @@ $chromosome_1 = $_GET['chromosome_1'];
 $upstream_length_1 = $_GET['upstream_length_1'];
 
 if (is_string($binding_tf_1)) {
-    $binding_tf_arr = preg_split("/[;, \n]+/", $binding_tf_1);
-    for ($i = 0; $i < count($binding_tf_arr); $i++) {
-        $binding_tf_arr[$i] = trim($binding_tf_arr[$i]);
+    $temp_binding_tf_arr = preg_split("/[;, \n]+/", $binding_tf_1);
+    $binding_tf_arr = array();
+    for ($i = 0; $i < count($temp_binding_tf_arr); $i++) {
+        if (!empty(trim($temp_binding_tf_arr[$i]))) {
+            array_push($binding_tf_arr, trim($temp_binding_tf_arr[$i]));
+        }
     }
 } elseif (is_array($binding_tf_1)) {
-    $binding_tf_arr = $binding_tf_1;
-    for ($i = 0; $i < count($binding_tf_arr); $i++) {
-        $binding_tf_arr[$i] = trim($binding_tf_arr[$i]);
+    $temp_binding_tf_arr = $binding_tf_1;
+    $binding_tf_arr = array();
+    for ($i = 0; $i < count($temp_binding_tf_arr); $i++) {
+        if (!empty(trim($temp_binding_tf_arr[$i]))) {
+            array_push($binding_tf_arr, trim($temp_binding_tf_arr[$i]));
+        }
     }
 }
 

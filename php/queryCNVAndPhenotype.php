@@ -11,26 +11,39 @@ $cn = $_GET['CN'];
 $phenotype = $_GET['Phenotype'];
 
 if (is_string($cn)) {
-    $cn_array = preg_split("/[;, \n]+/", $cn);
-    for ($i = 0; $i < count($cn_array); $i++) {
-        $cn_array[$i] = trim($cn_array[$i]);
+    $temp_cn_array = preg_split("/[;, \n]+/", $cn);
+    $cn_array = array();
+    for ($i = 0; $i < count($temp_cn_array); $i++) {
+        if (!empty(trim($temp_cn_array[$i]))) {
+            array_push($cn_array, trim($temp_cn_array[$i]));
+        }
     }
 } elseif (is_array($cn)) {
-    $cn_array = $cn;
-    for ($i = 0; $i < count($cn_array); $i++) {
-        $cn_array[$i] = trim($cn_array[$i]);
+    $temp_cn_array = $cn;
+    $cn_array = array();
+    for ($i = 0; $i < count($temp_cn_array); $i++) {
+        if (!empty(trim($temp_cn_array[$i]))) {
+            array_push($cn_array, trim($temp_cn_array[$i]));
+        }
     }
 }
 
 if (is_string($phenotype)) {
-    $phenotype_array = preg_split("/[;, \n]+/", $phenotype);
-    for ($i = 0; $i < count($phenotype_array); $i++) {
-        $phenotype_array[$i] = trim($phenotype_array[$i]);
+    $phenotype = trim($phenotype);
+    $temp_phenotype_array = preg_split("/[;, \n]+/", $phenotype);
+    $phenotype_array = array();
+    for ($i = 0; $i < count($temp_phenotype_array); $i++) {
+        if (!empty(trim($temp_phenotype_array[$i]))) {
+            array_push($phenotype_array, trim($temp_phenotype_array[$i]));
+        }
     }
 } elseif (is_array($phenotype)) {
-    $phenotype_array = $phenotype;
-    for ($i = 0; $i < count($phenotype_array); $i++) {
-        $phenotype_array[$i] = trim($phenotype_array[$i]);
+    $temp_phenotype_array = $phenotype;
+    $phenotype_array = array();
+    for ($i = 0; $i < count($temp_phenotype_array); $i++) {
+        if (!empty(trim($temp_phenotype_array[$i]))) {
+            array_push($phenotype_array, trim($temp_phenotype_array[$i]));
+        }
     }
 }
 

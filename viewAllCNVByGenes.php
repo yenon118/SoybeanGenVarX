@@ -13,14 +13,20 @@ $gene_id_2 = $_GET['gene_id_2'];
 $cnv_data_option_2 = $_GET['cnv_data_option_2'];
 
 if (is_string($gene_id_2)) {
-    $gene_arr = preg_split("/[;, \n]+/", $gene_id_2);
-    for ($i = 0; $i < count($gene_arr); $i++) {
-        $gene_arr[$i] = trim($gene_arr[$i]);
+    $temp_gene_arr = preg_split("/[;, \n]+/", $gene_id_2);
+    $gene_arr = array();
+    for ($i = 0; $i < count($temp_gene_arr); $i++) {
+        if (!empty(trim($temp_gene_arr[$i]))) {
+            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        }
     }
 } elseif (is_array($gene_id_2)) {
-    $gene_arr = $gene_id_2;
-    for ($i = 0; $i < count($gene_arr); $i++) {
-        $gene_arr[$i] = trim($gene_arr[$i]);
+    $temp_gene_arr = $gene_id_2;
+    $gene_arr = array();
+    for ($i = 0; $i < count($temp_gene_arr); $i++) {
+        if (!empty(trim($temp_gene_arr[$i]))) {
+            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        }
     }
 } else {
     echo "<p>Please input correct gene IDs!!!</p>";

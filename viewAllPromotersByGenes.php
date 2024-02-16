@@ -13,14 +13,20 @@ $gene_name_1 = $_GET['gene_name_1'];
 $upstream_length_1 = $_GET['upstream_length_1'];
 
 if (is_string($gene_name_1)) {
-    $gene_arr = preg_split("/[;, \n]+/", $gene_name_1);
-    for ($i = 0; $i < count($gene_arr); $i++) {
-        $gene_arr[$i] = trim($gene_arr[$i]);
+    $temp_gene_arr = preg_split("/[;, \n]+/", $gene_name_1);
+    $gene_arr = array();
+    for ($i = 0; $i < count($temp_gene_arr); $i++) {
+        if (!empty(trim($temp_gene_arr[$i]))) {
+            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        }
     }
 } elseif (is_array($gene_name_1)) {
-    $gene_arr = $gene_name_1;
-    for ($i = 0; $i < count($gene_arr); $i++) {
-        $gene_arr[$i] = trim($gene_arr[$i]);
+    $temp_gene_arr = $gene_name_1;
+    $gene_arr = array();
+    for ($i = 0; $i < count($temp_gene_arr); $i++) {
+        if (!empty(trim($temp_gene_arr[$i]))) {
+            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        }
     }
 }
 

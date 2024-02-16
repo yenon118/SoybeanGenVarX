@@ -11,9 +11,21 @@ $phenotype = $_GET['Phenotype'];
 $cn_1 = $_GET['CN'];
 
 if (is_string($cn_1)) {
-    $cn_array = preg_split("/[;,\n\r]+/", trim($cn_1));
+    $temp_cn_array = preg_split("/[;,\n\r]+/", trim($cn_1));
+    $cn_array = array();
+    for ($i = 0; $i < count($temp_cn_array); $i++) {
+        if (!empty(trim($temp_cn_array[$i]))) {
+            array_push($cn_array, trim($temp_cn_array[$i]));
+        }
+    }
 } elseif (is_array($cn_1)) {
-    $cn_array = $cn_1;
+    $temp_cn_array = $cn_1;
+    $cn_array = array();
+    for ($i = 0; $i < count($temp_cn_array); $i++) {
+        if (!empty(trim($temp_cn_array[$i]))) {
+            array_push($cn_array, trim($temp_cn_array[$i]));
+        }
+    }
 }
 
 

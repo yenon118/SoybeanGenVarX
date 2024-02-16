@@ -18,14 +18,20 @@ $accession_2 = trim($accession_2);
 $cnv_data_option_2 = trim($cnv_data_option_2);
 
 if (is_string($copy_number_2)) {
-    $copy_number_arr = preg_split("/[;, \n]+/", trim($copy_number_2));
-    for ($i = 0; $i < count($copy_number_arr); $i++) {
-        $copy_number_arr[$i] = trim($copy_number_arr[$i]);
+    $temp_copy_number_arr = preg_split("/[;, \n]+/", trim($copy_number_2));
+    $copy_number_arr = array();
+    for ($i = 0; $i < count($temp_copy_number_arr); $i++) {
+        if (!empty(trim($temp_copy_number_arr[$i]))) {
+            array_push($copy_number_arr, trim($temp_copy_number_arr[$i]));
+        }
     }
 } elseif (is_array($copy_number_2)) {
-    $copy_number_arr = $copy_number_2;
-    for ($i = 0; $i < count($copy_number_arr); $i++) {
-        $copy_number_arr[$i] = trim($copy_number_arr[$i]);
+    $temp_copy_number_arr = $copy_number_2;
+    $copy_number_arr = array();
+    for ($i = 0; $i < count($temp_copy_number_arr); $i++) {
+        if (!empty(trim($temp_copy_number_arr[$i]))) {
+            array_push($copy_number_arr, trim($temp_copy_number_arr[$i]));
+        }
     }
 } else {
     exit(0);
