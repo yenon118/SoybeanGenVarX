@@ -121,7 +121,7 @@ if (isset($cnv_accession_count_result_arr) && is_array($cnv_accession_count_resu
         }
         $query_str = $query_str . "AS CNV ";
         $query_str = $query_str . "LEFT JOIN soykb.mViz_Soybean_Accession_Mapping AS AM ";
-        $query_str = $query_str . "ON BINARY CNV.Accession = AM.Accession ";
+        $query_str = $query_str . "ON CAST(CNV.Accession AS BINARY) = CAST(AM.Accession AS BINARY) ";
         $query_str = $query_str . "WHERE (CNV.Chromosome = '" . $cnv_accession_count_result_arr[$i]["Chromosome"] . "') ";
         $query_str = $query_str . "AND (CNV.Start BETWEEN " . $cnv_accession_count_result_arr[$i]["Start"] . " AND " . $cnv_accession_count_result_arr[$i]["End"] . ") ";
         $query_str = $query_str . "AND (CNV.End BETWEEN " . $cnv_accession_count_result_arr[$i]["Start"] . " AND " . $cnv_accession_count_result_arr[$i]["End"] . ") ";
