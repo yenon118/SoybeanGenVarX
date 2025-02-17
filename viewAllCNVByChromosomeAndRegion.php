@@ -1,4 +1,7 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -15,10 +18,19 @@ $position_start_2 = $_GET['position_start_2'];
 $position_end_2 = $_GET['position_end_2'];
 $cnv_data_option_2 = $_GET['cnv_data_option_2'];
 
-$chromosome_2 = trim($chromosome_2);
-$position_start_2 = intval(trim($position_start_2))-1;
-$position_end_2 = intval(trim($position_end_2))+1;
-$cnv_data_option_2 = trim($cnv_data_option_2);
+$chromosome_2 = clean_malicious_input($chromosome_2);
+$chromosome_2 = preg_replace('/\s+/', '', $chromosome_2);
+
+$position_start_2 = clean_malicious_input($position_start_2);
+$position_start_2 = preg_replace('/\s+/', '', $position_start_2);
+$position_start_2 = abs(intval(preg_replace("/[^0-9.]/", "", $position_start_2))) - 1;
+
+$position_end_2 = clean_malicious_input($position_end_2);
+$position_end_2 = preg_replace('/\s+/', '', $position_end_2);
+$position_end_2 = abs(intval(preg_replace("/[^0-9.]/", "", $position_end_2))) + 1;
+
+$cnv_data_option_2 = clean_malicious_input($cnv_data_option_2);
+$cnv_data_option_2 = preg_replace('/\s+/', '', $cnv_data_option_2);
 ?>
 
 <!-- Back button -->
@@ -70,37 +82,37 @@ if (count($result) > 0) {
 <h3>Queried CNV region: </h3>
 <?php
 
-    if (isset($cnv_accession_count_result_arr) && is_array($cnv_accession_count_result_arr) && !empty($cnv_accession_count_result_arr) && count($cnv_accession_count_result_arr) > 0) {
-        echo "<div style='width:auto; height:auto; border:3px solid #000; overflow:scroll; max-height:1000px; display:inline-block;'>";
-        echo "<table style='text-align:center;'>";
+if (isset($cnv_accession_count_result_arr) && is_array($cnv_accession_count_result_arr) && !empty($cnv_accession_count_result_arr) && count($cnv_accession_count_result_arr) > 0) {
+    echo "<div style='width:auto; height:auto; border:3px solid #000; overflow:scroll; max-height:1000px; display:inline-block;'>";
+    echo "<table style='text-align:center;'>";
 
-        // Table header
-        echo "<tr>";
-        foreach ($cnv_accession_count_result_arr[0] as $key => $value) {
-            echo "<th style=\"border:1px solid black;\">" . strval($key) . "</th>";
-        }
-        echo "</tr>";
-
-        // Table body
-        for ($i = 0; $i < count($cnv_accession_count_result_arr); $i++) {
-            $tr_bgcolor = ($i % 2 ? "#FFFFFF" : "#DDFFDD");
-
-            echo "<tr bgcolor=\"" . $tr_bgcolor . "\">";
-            foreach ($cnv_accession_count_result_arr[$i] as $key => $value) {
-                echo "<td style=\"border:1px solid black;min-width:80px;\">" . $value . "</td>";
-            }
-            echo "<td><a href=\"/SoybeanGenVarX/viewCNVAndImprovementStatus.php?chromosome_1=" . $cnv_accession_count_result_arr[$i]["Chromosome"] . "&position_start_1=" . $cnv_accession_count_result_arr[$i]["Start"] . "&position_end_1=" . $cnv_accession_count_result_arr[$i]["End"] . "&cnv_data_option_1=" . $cnv_data_option_2 . "\" target=\"_blank\" ><button>View Details</button></a></td>";
-            echo "<td><a href=\"/SoybeanGenVarX/viewCNVAndPhenotype.php?chromosome_1=" . $cnv_accession_count_result_arr[$i]["Chromosome"] . "&position_start_1=" . $cnv_accession_count_result_arr[$i]["Start"] . "&position_end_1=" . $cnv_accession_count_result_arr[$i]["End"] . "&cnv_data_option_1=" . $cnv_data_option_2 . "\" target=\"_blank\" ><button>Connect Phenotypes</button></a></td>";
-            echo "</tr>";
-        }
-
-        echo "</table>";
-        echo "</div>";
-
-        echo "<br /><br />";
-    } else {
-        echo "The queried CNV region cannot be found!!!";
+    // Table header
+    echo "<tr>";
+    foreach ($cnv_accession_count_result_arr[0] as $key => $value) {
+        echo "<th style=\"border:1px solid black;\">" . strval($key) . "</th>";
     }
+    echo "</tr>";
+
+    // Table body
+    for ($i = 0; $i < count($cnv_accession_count_result_arr); $i++) {
+        $tr_bgcolor = ($i % 2 ? "#FFFFFF" : "#DDFFDD");
+
+        echo "<tr bgcolor=\"" . $tr_bgcolor . "\">";
+        foreach ($cnv_accession_count_result_arr[$i] as $key => $value) {
+            echo "<td style=\"border:1px solid black;min-width:80px;\">" . $value . "</td>";
+        }
+        echo "<td><a href=\"/SoybeanGenVarX/viewCNVAndImprovementStatus.php?chromosome_1=" . $cnv_accession_count_result_arr[$i]["Chromosome"] . "&position_start_1=" . $cnv_accession_count_result_arr[$i]["Start"] . "&position_end_1=" . $cnv_accession_count_result_arr[$i]["End"] . "&cnv_data_option_1=" . $cnv_data_option_2 . "\" target=\"_blank\" ><button>View Details</button></a></td>";
+        echo "<td><a href=\"/SoybeanGenVarX/viewCNVAndPhenotype.php?chromosome_1=" . $cnv_accession_count_result_arr[$i]["Chromosome"] . "&position_start_1=" . $cnv_accession_count_result_arr[$i]["Start"] . "&position_end_1=" . $cnv_accession_count_result_arr[$i]["End"] . "&cnv_data_option_1=" . $cnv_data_option_2 . "\" target=\"_blank\" ><button>Connect Phenotypes</button></a></td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
+    echo "</div>";
+
+    echo "<br /><br />";
+} else {
+    echo "The queried CNV region cannot be found!!!";
+}
 
 ?>
 

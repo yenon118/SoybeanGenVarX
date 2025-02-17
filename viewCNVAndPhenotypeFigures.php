@@ -1,5 +1,8 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.plot.ly/plotly-3.0.0.min.js" charset="utf-8"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -20,12 +23,30 @@ $data_option = $_GET['cnv_data_option_1'];
 $phenotype = $_GET['phenotype_1'];
 $cn_1 = $_GET['cn_1'];
 
-$chromosome = trim($chromosome);
-$position_start = intval(trim($position_start));
-$position_end = intval(trim($position_end));
-$data_option = trim($data_option);
-$phenotype = trim($phenotype);
-$cn_1 = trim($cn_1);
+$chromosome = clean_malicious_input($chromosome);
+$chromosome = preg_replace('/\s+/', '', $chromosome);
+
+$position_start = clean_malicious_input($position_start);
+$position_start = preg_replace('/\s+/', '', $position_start);
+
+$position_end = clean_malicious_input($position_end);
+$position_end = preg_replace('/\s+/', '', $position_end);
+
+$width = clean_malicious_input($width);
+$width = preg_replace('/\s+/', '', $width);
+
+$strand = clean_malicious_input($strand);
+$strand = preg_replace('/\s+/', '', $strand);
+
+$data_option = clean_malicious_input($data_option);
+$data_option = preg_replace('/\s+/', '', $data_option);
+
+$phenotype = clean_malicious_input($phenotype);
+
+$cn_1 = clean_malicious_input($cn_1);
+
+$position_start = abs(intval(preg_replace("/[^0-9.]/", "", $position_start)));
+$position_end = abs(intval(preg_replace("/[^0-9.]/", "", $position_end)));
 
 if (is_string($cn_1)) {
     $temp_cn_array = preg_split("/[;,\n\r]+/", trim($cn_1));
@@ -91,12 +112,36 @@ echo "<br /><br />";
 <script type="text/javascript" language="javascript" src="./js/viewCNVAndPhenotypeFigures.js"></script>
 
 <script type="text/javascript" language="javascript">
-    var chromosome = <?php if(isset($chromosome)) {echo json_encode($chromosome, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
-    var position_start = <?php if(isset($position_start)) {echo json_encode($position_start, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
-    var position_end = <?php if(isset($position_end)) {echo json_encode($position_end, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
-    var data_option = <?php if(isset($data_option)) {echo json_encode($data_option, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
-    var phenotype = <?php if(isset($phenotype)) {echo json_encode($phenotype, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
-    var cn_array = <?php if(isset($cn_array) && is_array($cn_array) && !empty($cn_array)) {echo json_encode($cn_array, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
+    var chromosome = <?php if (isset($chromosome)) {
+                            echo json_encode($chromosome, JSON_INVALID_UTF8_IGNORE);
+                        } else {
+                            echo "";
+                        } ?>;
+    var position_start = <?php if (isset($position_start)) {
+                                echo json_encode($position_start, JSON_INVALID_UTF8_IGNORE);
+                            } else {
+                                echo "";
+                            } ?>;
+    var position_end = <?php if (isset($position_end)) {
+                            echo json_encode($position_end, JSON_INVALID_UTF8_IGNORE);
+                        } else {
+                            echo "";
+                        } ?>;
+    var data_option = <?php if (isset($data_option)) {
+                            echo json_encode($data_option, JSON_INVALID_UTF8_IGNORE);
+                        } else {
+                            echo "";
+                        } ?>;
+    var phenotype = <?php if (isset($phenotype)) {
+                        echo json_encode($phenotype, JSON_INVALID_UTF8_IGNORE);
+                    } else {
+                        echo "";
+                    } ?>;
+    var cn_array = <?php if (isset($cn_array) && is_array($cn_array) && !empty($cn_array)) {
+                        echo json_encode($cn_array, JSON_INVALID_UTF8_IGNORE);
+                    } else {
+                        echo "";
+                    } ?>;
 
     if (chromosome && position_start && position_end && data_option && phenotype && cn_array.length > 0) {
         $.ajax({
@@ -111,7 +156,7 @@ echo "<br /><br />";
                 CN: cn_array,
                 Phenotype: phenotype
             },
-            success: function (response) {
+            success: function(response) {
                 res = JSON.parse(response);
 
                 if (res && phenotype) {
@@ -124,8 +169,8 @@ echo "<br /><br />";
 
                     // Summarize data
                     var result_dict = summarizeQueriedData(
-                        JSON.parse(JSON.stringify(res['data'])), 
-                        phenotype, 
+                        JSON.parse(JSON.stringify(res['data'])),
+                        phenotype,
                         'CN'
                     );
 
@@ -153,11 +198,11 @@ echo "<br /><br />";
                     document.getElementById('cn_summary_table_div').style.overflow = 'scroll';
                 }
             },
-            error: function (xhr, status, error) {
+            error: function(xhr, status, error) {
                 console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);
-                document.getElementById('cn_figure_div').innerText="";
-                document.getElementById('cn_summary_table_div').innerHTML="";
-                document.getElementById('improvement_status_summary_figure_div').innerHTML="";
+                document.getElementById('cn_figure_div').innerText = "";
+                document.getElementById('cn_summary_table_div').innerHTML = "";
+                document.getElementById('improvement_status_summary_figure_div').innerHTML = "";
                 // document.getElementById('status_figure_div').innerHTML="";
                 // document.getElementById('improvement_status_figure_div').innerHTML="";
                 // document.getElementById('classification_figure_div').innerHTML="";
@@ -182,9 +227,9 @@ echo "<br /><br />";
             }
         });
     } else {
-        document.getElementById('cn_figure_div').innerText="";
-        document.getElementById('cn_summary_table_div').innerHTML="";
-        document.getElementById('improvement_status_summary_figure_div').innerHTML="";
+        document.getElementById('cn_figure_div').innerText = "";
+        document.getElementById('cn_summary_table_div').innerHTML = "";
+        document.getElementById('improvement_status_summary_figure_div').innerHTML = "";
         // document.getElementById('status_figure_div').innerHTML="";
         // document.getElementById('improvement_status_figure_div').innerHTML="";
         // document.getElementById('classification_figure_div').innerHTML="";
@@ -207,5 +252,4 @@ echo "<br /><br />";
         // p_tag.innerHTML = "Classification distribution figure is not available due to lack of data!!!";
         // document.getElementById('classification_figure_div').appendChild(p_tag);
     }
-
 </script>

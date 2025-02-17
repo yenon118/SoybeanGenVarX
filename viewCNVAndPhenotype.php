@@ -1,6 +1,10 @@
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"></link>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+</link>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
 <style>
     .ui-accordion-header.ui-state-active {
         background-color: green;
@@ -30,10 +34,20 @@ $position_start_1 = $_GET['position_start_1'];
 $position_end_1 = $_GET['position_end_1'];
 $cnv_data_option_1 = $_GET['cnv_data_option_1'];
 
-$chromosome_1 = trim($chromosome_1);
-$position_start_1 = intval(trim($position_start_1));
-$position_end_1 = intval(trim($position_end_1));
-$cnv_data_option_1 = trim($cnv_data_option_1);
+$chromosome_1 = clean_malicious_input($chromosome_1);
+$chromosome_1 = preg_replace('/\s+/', '', $chromosome_1);
+
+$position_start_1 = clean_malicious_input($position_start_1);
+$position_start_1 = preg_replace('/\s+/', '', $position_start_1);
+
+$position_end_1 = clean_malicious_input($position_end_1);
+$position_end_1 = preg_replace('/\s+/', '', $position_end_1);
+
+$cnv_data_option_1 = clean_malicious_input($cnv_data_option_1);
+$cnv_data_option_1 = preg_replace('/\s+/', '', $cnv_data_option_1);
+
+$position_start_1 = abs(intval(trim($position_start_1)));
+$position_end_1 = abs(intval(trim($position_end_1)));
 
 ?>
 
@@ -147,7 +161,7 @@ echo "<input type=\"checkbox\" id=\"morphology_descriptor_28\" name=\"morphology
 echo "</div>";
 echo "<h3>Other Descriptor</h3>";
 echo "<div>";
-echo "<input type=\"checkbox\" id=\"other_descriptor_0\" name=\"other_descriptor_0\" value=\"ACIMPT\"><label for=\"other_descriptor_0\" style=\"margin-right:10px;\">ACIMPT</label>";
+// echo "<input type=\"checkbox\" id=\"other_descriptor_0\" name=\"other_descriptor_0\" value=\"ACIMPT\"><label for=\"other_descriptor_0\" style=\"margin-right:10px;\">ACIMPT</label>";
 echo "<input type=\"checkbox\" id=\"other_descriptor_1\" name=\"other_descriptor_1\" value=\"YIELD\"><label for=\"other_descriptor_1\" style=\"margin-right:10px;\">YIELD</label>";
 echo "<input type=\"checkbox\" id=\"other_descriptor_2\" name=\"other_descriptor_2\" value=\"FLUORESCE\"><label for=\"other_descriptor_2\" style=\"margin-right:10px;\">FLUORESCE</label>";
 echo "<input type=\"checkbox\" id=\"other_descriptor_3\" name=\"other_descriptor_3\" value=\"LATITUDE\"><label for=\"other_descriptor_3\" style=\"margin-right:10px;\">LATITUDE</label>";

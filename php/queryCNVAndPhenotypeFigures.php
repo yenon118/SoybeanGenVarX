@@ -12,6 +12,25 @@ $phenotype = $_GET['Phenotype'];
 $cn_1 = $_GET['CN'];
 
 
+$chromosome = clean_malicious_input($chromosome);
+$chromosome = preg_replace('/\s+/', '', $chromosome);
+
+$position_start = clean_malicious_input($position_start);
+$position_start = preg_replace('/\s+/', '', $position_start);
+$position_start = preg_replace("/[^0-9.]/", "", $position_start);
+
+$position_end = clean_malicious_input($position_end);
+$position_end = preg_replace('/\s+/', '', $position_end);
+$position_end = preg_replace("/[^0-9.]/", "", $position_end);
+
+$data_option = clean_malicious_input($data_option);
+$data_option = preg_replace('/\s+/', '', $data_option);
+
+$phenotype = clean_malicious_input($phenotype);
+
+$cn_1 = clean_malicious_input($cn_1);
+
+
 $db = "soykb";
 $accession_mapping_table_name = "mViz_Soybean_Accession_Mapping";
 $phenotype_table_name = "mViz_Soybean_Phenotype_Data";
@@ -101,9 +120,9 @@ if (isset($cn_array)) {
     if (count($cn_array) > 0) {
         $query_str = $query_str . "    AND (C.CN IN ('";
         for ($i = 0; $i < count($cn_array); $i++) {
-            if($i < (count($cn_array)-1)){
+            if ($i < (count($cn_array) - 1)) {
                 $query_str = $query_str . trim($cn_array[$i]) . "', '";
-            } elseif ($i == (count($cn_array)-1)) {
+            } elseif ($i == (count($cn_array) - 1)) {
                 $query_str = $query_str . trim($cn_array[$i]);
             }
         }
@@ -130,4 +149,5 @@ $result = $stmt->fetchAll();
 $result_arr = pdoResultFilter($result);
 
 echo json_encode(array("data" => $result_arr), JSON_INVALID_UTF8_IGNORE);
+
 ?>

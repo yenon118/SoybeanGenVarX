@@ -1,4 +1,7 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -16,6 +19,22 @@ $motif_start = $_GET['motif_start'];
 $motif_end = $_GET['motif_end'];
 $gene_binding_sequence = $_GET['gene_binding_sequence'];
 $upstream_length = 2000;
+
+$motif = clean_malicious_input($motif);
+$motif = preg_replace('/\s+/', '', $motif);
+
+$gene = clean_malicious_input($gene);
+$gene = preg_replace('/\s+/', '', $gene);
+
+$chromosome = clean_malicious_input($chromosome);
+$chromosome = preg_replace('/\s+/', '', $chromosome);
+
+$motif_start = clean_malicious_input($motif_start);
+
+$motif_end = clean_malicious_input($motif_end);
+
+$gene_binding_sequence = clean_malicious_input($gene_binding_sequence);
+$gene_binding_sequence = preg_replace('/\s+/', '', $gene_binding_sequence);
 
 if (is_string($motif_start)) {
     $motif_start = intval(trim($motif_start));
@@ -149,7 +168,7 @@ $motif_result_arr = pdoResultFilter($result);
 // Div tags for selected motif
 echo "<div id=\"" . $gene . "_b\" style='width:auto; height:auto; overflow:visible; max-height:1000px;'></div>";
 
-if (isset($motif_result_arr) && !empty($motif_result_arr)){
+if (isset($motif_result_arr) && !empty($motif_result_arr)) {
     echo "<br />";
     echo "<br />";
     echo "<div style='width:auto; height:auto; overflow:scroll; max-height:1000px;'>";

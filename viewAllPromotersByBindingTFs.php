@@ -1,4 +1,7 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -12,6 +15,12 @@ include './php/pdoResultFilter.php';
 $binding_tf_1 = $_GET['binding_tf_1'];
 $chromosome_1 = $_GET['chromosome_1'];
 $upstream_length_1 = $_GET['upstream_length_1'];
+
+$binding_tf_1 = clean_malicious_input($binding_tf_1);
+
+$chromosome_1 = clean_malicious_input($chromosome_1);
+
+$upstream_length_1 = clean_malicious_input($upstream_length_1);
 
 if (is_string($binding_tf_1)) {
     $temp_binding_tf_arr = preg_split("/[;, \n]+/", $binding_tf_1);
@@ -32,17 +41,24 @@ if (is_string($binding_tf_1)) {
 }
 
 if (is_string($chromosome_1)) {
-    $chromosome = trim($chromosome_1);
+    $chromosome = preg_replace('/\s+/', '', $chromosome_1);
 }
 
 if (is_string($upstream_length_1)) {
-    $upstream_length = intval(trim($upstream_length_1));
+    $upstream_length_1 = preg_replace("/[^0-9.]/", "", $upstream_length_1);
+    $upstream_length = intval(floatval(trim($upstream_length_1)));
 } elseif (is_int($upstream_length_1)) {
     $upstream_length = $upstream_length_1;
 } elseif (is_float($upstream_length_1)) {
     $upstream_length = intval($upstream_length_1);
 } else {
     $upstream_length = 2000;
+}
+
+$upstream_length = abs($upstream_length);
+
+if ($upstream_length > 6000) {
+    $upstream_length = 6000;
 }
 
 ?>
@@ -121,7 +137,7 @@ for ($i = 0; $i < count($binding_tf_arr); $i++) {
 
     $motif_result_arr = pdoResultFilter($result);
 
-    if (isset($motif_result_arr) && !empty($motif_result_arr)){
+    if (isset($motif_result_arr) && !empty($motif_result_arr)) {
         echo "<div style='width:auto; height:auto; overflow:scroll; max-height:1000px;'>";
         echo "<table style='text-align:center; border:3px solid #000;'>";
 
@@ -168,4 +184,3 @@ for ($i = 0; $i < count($binding_tf_arr); $i++) {
 ?>
 
 <?php include '../footer.php'; ?>
-

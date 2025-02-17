@@ -1,4 +1,7 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -12,20 +15,25 @@ include './php/pdoResultFilter.php';
 $gene_id_2 = $_GET['gene_id_2'];
 $cnv_data_option_2 = $_GET['cnv_data_option_2'];
 
+$gene_id_2 = clean_malicious_input($gene_id_2);
+
+$cnv_data_option_2 = clean_malicious_input($cnv_data_option_2);
+$cnv_data_option_2 = preg_replace('/\s+/', '', $cnv_data_option_2);
+
 if (is_string($gene_id_2)) {
     $temp_gene_arr = preg_split("/[;, \n]+/", $gene_id_2);
     $gene_arr = array();
     for ($i = 0; $i < count($temp_gene_arr); $i++) {
-        if (!empty(trim($temp_gene_arr[$i]))) {
-            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        if (!empty(preg_replace('/\s+/', '', $temp_gene_arr[$i]))) {
+            array_push($gene_arr, preg_replace('/\s+/', '', $temp_gene_arr[$i]));
         }
     }
 } elseif (is_array($gene_id_2)) {
     $temp_gene_arr = $gene_id_2;
     $gene_arr = array();
     for ($i = 0; $i < count($temp_gene_arr); $i++) {
-        if (!empty(trim($temp_gene_arr[$i]))) {
-            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        if (!empty(preg_replace('/\s+/', '', $temp_gene_arr[$i]))) {
+            array_push($gene_arr, preg_replace('/\s+/', '', $temp_gene_arr[$i]));
         }
     }
 } else {
@@ -47,7 +55,7 @@ if (is_string($gene_id_2)) {
 $query_str = "SELECT Chromosome, Start, End, Strand, Name AS Gene_ID, Gene_Description FROM soykb.mViz_Soybean_GFF";
 $query_str = $query_str . " WHERE (Name IN ('";
 for ($i = 0; $i < count($gene_arr); $i++) {
-    if ($i < (count($gene_arr)-1)){
+    if ($i < (count($gene_arr) - 1)) {
         $query_str = $query_str . $gene_arr[$i] . "', '";
     } else {
         $query_str = $query_str . $gene_arr[$i];
@@ -101,7 +109,7 @@ if (isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result
 
 <!-- Query frequency table from database -->
 <?php
-if(isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_arr)) {
+if (isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_arr)) {
 
     $query_str = "SELECT Chromosome, Start, End, Width, Strand, ";
     $query_str = $query_str . "COUNT(IF(CN = 'CN0', 1, null)) AS CN0, ";
@@ -124,9 +132,9 @@ if(isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_
     $query_str = $query_str . "WHERE ";
 
     for ($i = 0; $i < count($gene_result_arr); $i++) {
-        if($i < (count($gene_result_arr)-1)){
+        if ($i < (count($gene_result_arr) - 1)) {
             $query_str = $query_str . "((Chromosome = '" . $gene_result_arr[$i]["Chromosome"] . "') AND (Start <= " . $gene_result_arr[$i]["Start"] . ") AND (End >= " . $gene_result_arr[$i]["End"] . ")) OR";
-        } elseif ($i == (count($gene_result_arr)-1)) {
+        } elseif ($i == (count($gene_result_arr) - 1)) {
             $query_str = $query_str . "((Chromosome = '" . $gene_result_arr[$i]["Chromosome"] . "') AND (Start <= " . $gene_result_arr[$i]["Start"] . ") AND (End >= " . $gene_result_arr[$i]["End"] . ")) ";
         }
     }
@@ -139,7 +147,6 @@ if(isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_
     $result = $stmt->fetchAll();
 
     $cnv_result_arr = pdoResultFilter($result);
-
 }
 
 ?>
@@ -147,11 +154,11 @@ if(isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_
 <!-- Render frequency table -->
 <h3>CNV regions and accession counts in different CNs: </h3>
 <?php
-if(isset($cnv_result_arr) && is_array($cnv_result_arr) && !empty($cnv_result_arr)) {
+if (isset($cnv_result_arr) && is_array($cnv_result_arr) && !empty($cnv_result_arr)) {
     // Make the frequency table
     echo "<div style='width:auto; height:auto; overflow:scroll; max-height:1000px;'>";
     echo "<table style='text-align:center; border:3px solid #000;'>";
-    
+
     // Table header
     echo "<tr>";
     foreach ($cnv_result_arr[0] as $key => $value) {
@@ -184,7 +191,7 @@ if(isset($cnv_result_arr) && is_array($cnv_result_arr) && !empty($cnv_result_arr
 <!-- Query CNV and Gene mapping table from database -->
 <h3>Neighbouring genes in different CNV regions: </h3>
 <?php
-if(isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_arr) && isset($cnv_result_arr) && is_array($cnv_result_arr) && !empty($cnv_result_arr)) {
+if (isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_arr) && isset($cnv_result_arr) && is_array($cnv_result_arr) && !empty($cnv_result_arr)) {
 
     for ($i = 0; $i < count($cnv_result_arr); $i++) {
         $query_str = "SELECT CNV.Chromosome, CNV.Start AS CNV_Start, CNV.End AS CNV_End, CNV.Width AS CNV_Width, CNV.Strand AS CNV_Strand, ";
@@ -211,38 +218,38 @@ if(isset($gene_result_arr) && is_array($gene_result_arr) && !empty($gene_result_
         $cnv_gene_mapping_result_arr = pdoResultFilter($result);
 
         // Render CNV and gene mapping table or print not found message
-        if(isset($cnv_gene_mapping_result_arr) && is_array($cnv_gene_mapping_result_arr) && !empty($cnv_gene_mapping_result_arr)) {
+        if (isset($cnv_gene_mapping_result_arr) && is_array($cnv_gene_mapping_result_arr) && !empty($cnv_gene_mapping_result_arr)) {
             // Make the cnv and gene mapping table
             echo "<div style='width:auto; height:auto; overflow:scroll; max-height:1000px;'>";
             echo "<table style='text-align:center; border:3px solid #000;'>";
-            
+
             // Table header
             echo "<tr>";
             foreach ($cnv_gene_mapping_result_arr[0] as $key => $value) {
                 echo "<th style=\"border:1px solid black; min-width:80px;\">" . $key . "</th>";
             }
             echo "</tr>";
-        
+
             // Table body
             for ($j = 0; $j < count($cnv_gene_mapping_result_arr); $j++) {
                 $tr_bgcolor = ($j % 2 ? "#FFFFFF" : "#DDFFDD");
-        
+
                 echo "<tr bgcolor=\"" . $tr_bgcolor . "\">";
                 foreach ($cnv_gene_mapping_result_arr[$j] as $key => $value) {
                     echo "<td style=\"border:1px solid black; min-width:80px;\">" . $value . "</td>";
                 }
                 echo "</tr>";
             }
-        
+
             echo "</table>";
             echo "</div>";
-        
+
             echo "<br />";
         } else {
             echo "<p>CNV region (" . $cnv_result_arr[$i]["Chromosome"] . ":" . $cnv_result_arr[$i]["Start"] . "-" . $cnv_result_arr[$i]["End"] . ")does not have any gene!!!</p>";
         }
     }
-} else { 
+} else {
     echo "<p>No Gene and CNV mapping could be found!!!</p>";
 }
 ?>

@@ -47,7 +47,7 @@ function convertJsonToCsv(jsonObject) {
         let tr_keys = Object.keys(jsonObject[i]);
         for (let j = 0; j < tr_keys.length; j++) {
             csvString += ((jsonObject[i][tr_keys[j]] === null) || (jsonObject[i][tr_keys[j]] === undefined)) ? '\"\"' : "\"" + jsonObject[i][tr_keys[j]] + "\"";
-            if (j < (tr_keys.length-1)) {
+            if (j < (tr_keys.length - 1)) {
                 csvString += ',';
             }
         }
@@ -155,7 +155,7 @@ function constructInfoTable(res, chromosome, position_start, position_end, cnv_d
             detail_th.setAttribute("style", "border:1px solid black; min-width:80px; height:18.5px;");
             var detail_a = document.createElement('a');
             detail_a.target = "_blank";
-            detail_a.href = "/SoybeanGenVarX/viewCNVAndPhenotypeFigures.php?chromosome_1=" + chromosome + "&position_start_1=" + position_start + "&position_end_1=" + position_end + "&width_1=" + res[0]['Width'] + "&strand_1=" + res[0]['Strand'] + "&cnv_data_option_1=" + cnv_data_option + "&phenotype_1=" + header_array[i] +"&cn_1=" + cn_array.join("%0D%0A");;
+            detail_a.href = "/SoybeanGenVarX/viewCNVAndPhenotypeFigures.php?chromosome_1=" + chromosome + "&position_start_1=" + position_start + "&position_end_1=" + position_end + "&width_1=" + res[0]['Width'] + "&strand_1=" + res[0]['Strand'] + "&cnv_data_option_1=" + cnv_data_option + "&phenotype_1=" + header_array[i] + "&cn_1=" + cn_array.join("%0D%0A");;
             detail_a.innerHTML = header_array[i];
             detail_th.appendChild(detail_a);
             detail_header_tr.appendChild(detail_th);
@@ -167,7 +167,7 @@ function constructInfoTable(res, chromosome, position_start, position_end, cnv_d
 
     for (let i = 0; i < res.length; i++) {
         var detail_tr = document.createElement("tr");
-        detail_tr.style.backgroundColor = ((i%2) ? "#FFFFFF" : "#DDFFDD");
+        detail_tr.style.backgroundColor = ((i % 2) ? "#FFFFFF" : "#DDFFDD");
         for (let j = 0; j < header_array.length; j++) {
             var detail_td = document.createElement("td");
             detail_td.setAttribute("style", "border:1px solid black; min-width:80px; height:18.5px;");
@@ -240,7 +240,7 @@ function queryCNVAndPhenotype() {
                     document.getElementById('CNV_and_Phenotye_detail_table').appendChild(error_message);
                     document.getElementById('CNV_and_Phenotye_detail_table').style.overflow = 'visible';
                 }
-                
+
             },
             error: function (xhr, status, error) {
                 console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);
@@ -302,11 +302,11 @@ function downloadCNVAndPhenotype() {
                 if (res.length > 0) {
                     let csvString = convertJsonToCsv(res);
                     createAndDownloadCsvFile(csvString, String(chromosome_1) + "_" + String(position_start_1) + "_" + String(position_end_1) + "_data");
-                    
+
                 } else {
                     alert("Please select CN to download data!!!");
                 }
-                
+
             },
             error: function (xhr, status, error) {
                 console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);

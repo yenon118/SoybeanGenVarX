@@ -1,4 +1,7 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -14,9 +17,17 @@ $chromosome_3 = $_GET['chromosome_3'];
 $position_start_3 = $_GET['position_start_3'];
 $position_end_3 = $_GET['position_end_3'];
 
-$chromosome_3 = trim($chromosome_3);
-$position_start_3 = intval(trim($position_start_3))-1;
-$position_end_3 = intval(trim($position_end_3))+1;
+$chromosome_3 = clean_malicious_input($chromosome_3);
+$chromosome_3 = preg_replace('/\s+/', '', $chromosome_3);
+
+$position_start_3 = clean_malicious_input($position_start_3);
+$position_start_3 = preg_replace('/\s+/', '', $position_start_3);
+
+$position_end_3 = clean_malicious_input($position_end_3);
+$position_end_3 = preg_replace('/\s+/', '', $position_end_3);
+
+$position_start_3 = intval(preg_replace("/[^0-9.]/", "", $position_start_3)) - 1;
+$position_end_3 = intval(preg_replace("/[^0-9.]/", "", $position_end_3)) + 1;
 
 ?>
 
@@ -55,48 +66,48 @@ if (count($result) > 0) {
 <!-- Render the table -->
 <?php
 
-    if (count($result_arr) > 0) {
-        echo "<div style='width:auto; height:auto; border:3px solid #000; overflow:scroll; max-height:1000px; display:inline-block;'>";
-        echo "<table style='text-align:center;'>";
+if (count($result_arr) > 0) {
+    echo "<div style='width:auto; height:auto; border:3px solid #000; overflow:scroll; max-height:1000px; display:inline-block;'>";
+    echo "<table style='text-align:center;'>";
 
-        // Table header
-        echo "<tr>";
-        foreach ($result_arr[0] as $key => $value) {
-            echo "<th style=\"border:1px solid black;\">" . strval($key) . "</th>";
-        }
-        echo "<th style=\"border:1px solid black;\">Sequence</th>";
-        echo "<th style=\"border:1px solid black;\">Reference Sequence</th>";
-        echo "</tr>";
-
-        // Table body
-        for ($i = 0; $i < count($result_arr); $i++) {
-            $tr_bgcolor = ($i % 2 ? "#FFFFFF" : "#DDFFDD");
-
-            echo "<tr bgcolor=\"" . $tr_bgcolor . "\">";
-            foreach ($result_arr[$i] as $key => $value) {
-                echo "<td style=\"border:1px solid black;min-width:120px;\">" . $value . "</td>";
-            }
-
-            if (file_exists("assets/TE_sequences/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Family']) . "/" . $result_arr[$i]['Chromosome'] . "_" . $result_arr[$i]['TE_Start'] . "_" . $result_arr[$i]['TE_End'] . "_" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta")) {
-                echo "<td style=\"border:1px solid black; min-width:80px;\"><a href=\"assets/TE_sequences/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Family']) . "/" . $result_arr[$i]['Chromosome'] . "_" . $result_arr[$i]['TE_Start'] . "_" . $result_arr[$i]['TE_End'] . "_" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta\" target=\"_blank\"><button>Download Sequence</button></a></td>";
-            } else {
-                echo "<td style=\"border:1px solid black; min-width:80px;\">-</td>";
-            }
-            
-            $te_family = preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Family']);
-
-            if (file_exists("assets/TE_reference_sequences/" . $te_family . "/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta")) {
-                echo "<td style=\"border:1px solid black; min-width:80px;\"><a href=\"assets/TE_reference_sequences/" . $te_family . "/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta\" target=\"_blank\"><button>Download Reference Sequence</button></a></td>";
-            } else {
-                echo "<td style=\"border:1px solid black; min-width:80px;\">-</td>";
-            }
-
-            echo "</tr>";
-        }
-
-        echo "</table>";
-        echo "</div>";
+    // Table header
+    echo "<tr>";
+    foreach ($result_arr[0] as $key => $value) {
+        echo "<th style=\"border:1px solid black;\">" . strval($key) . "</th>";
     }
+    echo "<th style=\"border:1px solid black;\">Sequence</th>";
+    echo "<th style=\"border:1px solid black;\">Reference Sequence</th>";
+    echo "</tr>";
+
+    // Table body
+    for ($i = 0; $i < count($result_arr); $i++) {
+        $tr_bgcolor = ($i % 2 ? "#FFFFFF" : "#DDFFDD");
+
+        echo "<tr bgcolor=\"" . $tr_bgcolor . "\">";
+        foreach ($result_arr[$i] as $key => $value) {
+            echo "<td style=\"border:1px solid black;min-width:120px;\">" . $value . "</td>";
+        }
+
+        if (file_exists("assets/TE_sequences/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Family']) . "/" . $result_arr[$i]['Chromosome'] . "_" . $result_arr[$i]['TE_Start'] . "_" . $result_arr[$i]['TE_End'] . "_" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta")) {
+            echo "<td style=\"border:1px solid black; min-width:80px;\"><a href=\"assets/TE_sequences/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Family']) . "/" . $result_arr[$i]['Chromosome'] . "_" . $result_arr[$i]['TE_Start'] . "_" . $result_arr[$i]['TE_End'] . "_" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta\" target=\"_blank\"><button>Download Sequence</button></a></td>";
+        } else {
+            echo "<td style=\"border:1px solid black; min-width:80px;\">-</td>";
+        }
+
+        $te_family = preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Family']);
+
+        if (file_exists("assets/TE_reference_sequences/" . $te_family . "/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta")) {
+            echo "<td style=\"border:1px solid black; min-width:80px;\"><a href=\"assets/TE_reference_sequences/" . $te_family . "/" . preg_replace("/[^[:alnum:][:space:]]/u", '_', $result_arr[$i]['TE_Element']) . ".fasta\" target=\"_blank\"><button>Download Reference Sequence</button></a></td>";
+        } else {
+            echo "<td style=\"border:1px solid black; min-width:80px;\">-</td>";
+        }
+
+        echo "</tr>";
+    }
+
+    echo "</table>";
+    echo "</div>";
+}
 
 ?>
 

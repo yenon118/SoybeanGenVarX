@@ -6,12 +6,14 @@ include '../header.php';
 <div>
     <table width="100%" cellspacing="14" cellpadding="14">
         <tr>
-            <td><h2>Promoter Search</h2></td>
+            <td>
+                <h2>Promoter Search</h2>
+            </td>
         </tr>
         <tr>
             <td width="50%" align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
                 <form action="viewAllPromotersByGenes.php" method="get" target="_blank">
-                    <h2>Search By Gene IDs</h2>
+                    <h2>Search by Gene IDs</h2>
                     <br />
                     <label for="gene_name_1"><b>Gene IDs:</b> (eg Glyma.01G049100 Glyma.01G049200 Glyma.01G049300)</label>
                     <textarea id="gene_name_1" name="gene_name_1" rows="10" cols="50" placeholder="&#10;Please separate each gene into a new line. &#10;&#10;Example:&#10;Glyma.01G049100&#10;Glyma.01G049200&#10;Glyma.01G049300"></textarea>
@@ -26,7 +28,7 @@ include '../header.php';
             </td>
             <td width="50%" align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
                 <form action="viewAllPromotersByBindingTFs.php" method="get" target="_blank">
-                    <h2>Search By Binding TFs</h2>
+                    <h2>Search by Binding TFs</h2>
                     <br />
                     <label for="binding_tf_1"><b>Binding TFs:</b> (eg Glyma.01G005500 Glyma.01G022500 Glyma.01G023500)</label>
                     <textarea id="binding_tf_1" name="binding_tf_1" rows="8" cols="50" placeholder="&#10;Please separate each gene into a new line. &#10;&#10;Example:&#10;Glyma.01G005500&#10;Glyma.01G022500&#10;Glyma.01G023500"></textarea>
@@ -72,7 +74,9 @@ include '../header.php';
             </td>
         </tr>
         <tr>
-            <td><h2>Copy Number Variation Search</h2></td>
+            <td>
+                <h2>Copy Number Variation Search</h2>
+            </td>
         </tr>
         <tr>
             <td width="50%" align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
@@ -95,7 +99,7 @@ include '../header.php';
             </td>
             <td width="50%" align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
                 <form action="viewAllCNVByAccessionAndCopyNumbers.php" method="get" target="_blank">
-                    <h2>Search By Accession and Copy Numbers</h2>
+                    <h2>Search by Accession and Copy Numbers</h2>
                     <br />
                     <label for="accession_2"><b>Accession:</b> (eg PI_479752)</label>
                     <input type="text" id="accession_2" name="accession_2" size="60">
@@ -117,9 +121,9 @@ include '../header.php';
             </td>
         </tr>
         <tr>
-        <td width="50%" align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
+            <td width="50%" align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
                 <form action="viewAllCNVByChromosomeAndRegion.php" method="get" target="_blank">
-                    <h2>Search By Chromosome and Region</h2>
+                    <h2>Search by Chromosome and Region</h2>
                     <br />
                     <label for="chromosome_2"><b>Chromosome:</b> (eg Chr01)</label>
                     <input type="text" id="chromosome_2" name="chromosome_2" size="60">
@@ -207,6 +211,9 @@ include '../header.php';
     <button onclick="downloadUserManual()" style="margin-right:20px;">Download User Manual</button>
 </div>
 
+<br />
+<br />
+
 <hr />
 
 <br />
@@ -218,7 +225,7 @@ include '../header.php';
             <td align="center" valign="top" style="border:1px solid #999999; padding:10px; background-color:#f8f8f8; text-align:left;">
                 <h2>If you use the Soybean Genomic Variations Explorer in your work, please cite:</h2>
                 <br />
-                <p> Chan YO, Biova J, Mahmood A, Dietz N, Bilyeu K, Škrabišová M, Joshi T: <b> Genomic Variations Explorer (GenVarX): A Toolset for Annotating Promoter and CNV Regions Using Genotypic and Phenotypic Differences. </b> Frontiers in Genetics 2023, In Press. </p>
+                <p> Chan YO, Biova J, Mahmood A, Dietz N, Bilyeu K, Škrabišová M, Joshi T: <b> Genomic Variations Explorer (GenVarX): A Toolset for Annotating Promoter and CNV Regions Using Genotypic and Phenotypic Differences. </b> Frontiers in Genetics 2023. </p>
             </td>
         </tr>
     </table>

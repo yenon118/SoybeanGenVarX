@@ -24,7 +24,7 @@ function updateGenotypeInAccordion(genotype) {
                         input_tag.id = "genotype_" + res[i]["Genotype"];
                         input_tag.name = "genotype_" + res[i]["Genotype"];
                         input_tag.value = res[i]["Genotype"];
-                        if(res[i]["Genotype"] == genotype) {
+                        if (res[i]["Genotype"] == genotype) {
                             input_tag.checked = true;
                         }
                         var label_tag = document.createElement('label');
@@ -59,7 +59,7 @@ function convertJsonToCsv(jsonObject) {
         let tr_keys = Object.keys(jsonObject[i]);
         for (let j = 0; j < tr_keys.length; j++) {
             csvString += ((jsonObject[i][tr_keys[j]] === null) || (jsonObject[i][tr_keys[j]] === undefined)) ? '\"\"' : "\"" + jsonObject[i][tr_keys[j]] + "\"";
-            if (j < (tr_keys.length-1)) {
+            if (j < (tr_keys.length - 1)) {
                 csvString += ',';
             }
         }
@@ -157,7 +157,7 @@ function constructInfoTable(res, chromosome, position, genotype_array) {
 
     for (let i = 0; i < res.length; i++) {
         var detail_tr = document.createElement("tr");
-        detail_tr.style.backgroundColor = ((i%2) ? "#FFFFFF" : "#DDFFDD");
+        detail_tr.style.backgroundColor = ((i % 2) ? "#FFFFFF" : "#DDFFDD");
         for (let j = 0; j < header_array.length; j++) {
             var detail_td = document.createElement("td");
             detail_td.setAttribute("style", "border:1px solid black; min-width:80px; height:18.5px;");
@@ -225,7 +225,7 @@ function queryVariantAndPhenotype() {
                     document.getElementById('Variant_and_Phenotye_detail_table').appendChild(error_message);
                     document.getElementById('Variant_and_Phenotye_detail_table').style.overflow = 'visible';
                 }
-                
+
             },
             error: function (xhr, status, error) {
                 console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);

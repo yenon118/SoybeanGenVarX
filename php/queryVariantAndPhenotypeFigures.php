@@ -10,6 +10,18 @@ $genotype = $_GET['Genotype'];
 $phenotype = $_GET['Phenotype'];
 
 
+$chromosome = clean_malicious_input($chromosome);
+$chromosome = preg_replace('/\s+/', '', $chromosome);
+
+$position = clean_malicious_input($position);
+$position = preg_replace('/\s+/', '', $position);
+$position = preg_replace("/[^0-9.]/", "", $position);
+
+$genotype = clean_malicious_input($genotype);
+
+$phenotype = clean_malicious_input($phenotype);
+
+
 $dataset = "Soy1066";
 $db = "soykb";
 $genotype_table = "mViz_" . $dataset . "_" . $chromosome . "_genotype_data";
@@ -82,9 +94,9 @@ if (isset($genotype_array)) {
     if (count($genotype_array) > 0) {
         $query_str = $query_str . "    AND (G.Genotype IN ('";
         for ($i = 0; $i < count($genotype_array); $i++) {
-            if($i < (count($genotype_array)-1)){
+            if ($i < (count($genotype_array) - 1)) {
                 $query_str = $query_str . trim($genotype_array[$i]) . "', '";
-            } elseif ($i == (count($genotype_array)-1)) {
+            } elseif ($i == (count($genotype_array) - 1)) {
                 $query_str = $query_str . trim($genotype_array[$i]);
             }
         }
@@ -111,4 +123,5 @@ $result = $stmt->fetchAll();
 $result_arr = pdoResultFilter($result);
 
 echo json_encode(array("data" => $result_arr), JSON_INVALID_UTF8_IGNORE);
+
 ?>

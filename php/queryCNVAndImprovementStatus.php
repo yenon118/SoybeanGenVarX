@@ -10,6 +10,22 @@ $position_end = $_GET['End'];
 $data_option = $_GET['Data_Option'];
 
 
+$chromosome = clean_malicious_input($chromosome);
+$chromosome = preg_replace('/\s+/', '', $chromosome);
+
+$position_start = clean_malicious_input($position_start);
+$position_start = preg_replace('/\s+/', '', $position_start);
+
+$position_end = clean_malicious_input($position_end);
+$position_end = preg_replace('/\s+/', '', $position_end);
+
+$data_option = clean_malicious_input($data_option);
+$data_option = preg_replace('/\s+/', '', $data_option);
+
+$position_start = abs(intval(preg_replace("/[^0-9.]/", "", $position_start)));
+$position_end = abs(intval(preg_replace("/[^0-9.]/", "", $position_end)));
+
+
 $db = "soykb";
 $accession_mapping_table_name = "mViz_Soybean_Accession_Mapping";
 $phenotype_table_name = "mViz_Soybean_Phenotype_Data";
@@ -57,4 +73,5 @@ $result = $stmt->fetchAll();
 $result_arr = pdoResultFilter($result);
 
 echo json_encode(array("data" => $result_arr), JSON_INVALID_UTF8_IGNORE);
+
 ?>

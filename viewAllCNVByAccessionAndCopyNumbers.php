@@ -1,4 +1,7 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -14,8 +17,13 @@ $accession_2 = $_GET['accession_2'];
 $copy_number_2 = $_GET['copy_number_2'];
 $cnv_data_option_2 = $_GET['cnv_data_option_2'];
 
-$accession_2 = trim($accession_2);
-$cnv_data_option_2 = trim($cnv_data_option_2);
+$accession_2 = clean_malicious_input($accession_2);
+$accession_2 = preg_replace('/\s+/', '', $accession_2);
+
+$copy_number_2 = clean_malicious_input($copy_number_2);
+
+$cnv_data_option_2 = clean_malicious_input($cnv_data_option_2);
+$cnv_data_option_2 = preg_replace('/\s+/', '', $cnv_data_option_2);
 
 if (is_string($copy_number_2)) {
     $temp_copy_number_arr = preg_split("/[;, \n]+/", trim($copy_number_2));
@@ -34,6 +42,7 @@ if (is_string($copy_number_2)) {
         }
     }
 } else {
+    echo "Invalid query!!!";
     exit(0);
 }
 
@@ -61,9 +70,9 @@ $query_str = $query_str . "LEFT JOIN soykb.mViz_Soybean_Accession_Mapping AS AM 
 $query_str = $query_str . "ON CAST(CNV.Accession AS BINARY) = CAST(AM.Accession AS BINARY) ";
 $query_str = $query_str . "WHERE ((CAST(AM.SoyKB_Accession AS BINARY) = CAST('" . $accession_2 . "' AS BINARY)) OR (CAST(AM.GRIN_Accession AS BINARY) = CAST('" . $accession_2 . "' AS BINARY))) AND (CNV.CN IN ('";
 for ($i = 0; $i < count($copy_number_arr); $i++) {
-    if($i < (count($copy_number_arr)-1)){
+    if ($i < (count($copy_number_arr) - 1)) {
         $query_str = $query_str . trim($copy_number_arr[$i]) . "', '";
-    } elseif ($i == (count($copy_number_arr)-1)) {
+    } elseif ($i == (count($copy_number_arr) - 1)) {
         $query_str = $query_str . trim($copy_number_arr[$i]);
     }
 }

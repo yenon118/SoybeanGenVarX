@@ -1,4 +1,7 @@
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <?php
 $TITLE = "Soybean Genomic Variations Explorer";
@@ -12,32 +15,43 @@ include './php/pdoResultFilter.php';
 $gene_name_1 = $_GET['gene_name_1'];
 $upstream_length_1 = $_GET['upstream_length_1'];
 
+$gene_name_1 = clean_malicious_input($gene_name_1);
+
+$upstream_length_1 = clean_malicious_input($upstream_length_1);
+
 if (is_string($gene_name_1)) {
     $temp_gene_arr = preg_split("/[;, \n]+/", $gene_name_1);
     $gene_arr = array();
     for ($i = 0; $i < count($temp_gene_arr); $i++) {
-        if (!empty(trim($temp_gene_arr[$i]))) {
-            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        if (!empty(preg_replace('/\s+/', '', $temp_gene_arr[$i]))) {
+            array_push($gene_arr, preg_replace('/\s+/', '', $temp_gene_arr[$i]));
         }
     }
 } elseif (is_array($gene_name_1)) {
     $temp_gene_arr = $gene_name_1;
     $gene_arr = array();
     for ($i = 0; $i < count($temp_gene_arr); $i++) {
-        if (!empty(trim($temp_gene_arr[$i]))) {
-            array_push($gene_arr, trim($temp_gene_arr[$i]));
+        if (!empty(preg_replace('/\s+/', '', $temp_gene_arr[$i]))) {
+            array_push($gene_arr, preg_replace('/\s+/', '', $temp_gene_arr[$i]));
         }
     }
 }
 
 if (is_string($upstream_length_1)) {
-    $upstream_length = intval(trim($upstream_length_1));
+    $upstream_length_1 = preg_replace("/[^0-9.]/", "", $upstream_length_1);
+    $upstream_length = intval(floatval(trim($upstream_length_1)));
 } elseif (is_int($upstream_length_1)) {
     $upstream_length = $upstream_length_1;
 } elseif (is_float($upstream_length_1)) {
     $upstream_length = intval($upstream_length_1);
 } else {
     $upstream_length = 2000;
+}
+
+$upstream_length = abs($upstream_length);
+
+if ($upstream_length > 6000) {
+    $upstream_length = 6000;
 }
 
 ?>
@@ -53,7 +67,7 @@ if (is_string($upstream_length_1)) {
 $query_str = "SELECT * FROM mViz_Soybean_GFF";
 $query_str = $query_str . " WHERE (Name IN ('";
 for ($i = 0; $i < count($gene_arr); $i++) {
-    if ($i < (count($gene_arr)-1)){
+    if ($i < (count($gene_arr) - 1)) {
         $query_str = $query_str . $gene_arr[$i] . "', '";
     } else {
         $query_str = $query_str . $gene_arr[$i];
@@ -72,10 +86,10 @@ $gene_result_arr = pdoResultFilter($result);
 <?php
 for ($i = 0; $i < count($gene_result_arr); $i++) {
     if ($gene_result_arr[$i]['Strand'] == '+') {
-        $gene_result_arr[$i]['Promoter_End'] = $gene_result_arr[$i]['Start']-1;
-        $gene_result_arr[$i]['Promoter_Start'] = ((($gene_result_arr[$i]['Promoter_End']-$upstream_length) > 0) ? ($gene_result_arr[$i]['Promoter_End']-$upstream_length) : 1);
+        $gene_result_arr[$i]['Promoter_End'] = $gene_result_arr[$i]['Start'] - 1;
+        $gene_result_arr[$i]['Promoter_Start'] = ((($gene_result_arr[$i]['Promoter_End'] - $upstream_length) > 0) ? ($gene_result_arr[$i]['Promoter_End'] - $upstream_length) : 1);
     } elseif ($gene_result_arr[$i]['Strand'] == '-') {
-        $gene_result_arr[$i]['Promoter_Start'] = $gene_result_arr[$i]['End']+1;
+        $gene_result_arr[$i]['Promoter_Start'] = $gene_result_arr[$i]['End'] + 1;
         $gene_result_arr[$i]['Promoter_End'] = $gene_result_arr[$i]['Promoter_Start'] + $upstream_length;
     }
 }
@@ -147,7 +161,7 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
 
     $motif_result_arr = pdoResultFilter($result);
 
-    if (isset($motif_result_arr) && !empty($motif_result_arr)){
+    if (isset($motif_result_arr) && !empty($motif_result_arr)) {
         echo "<div style='width:auto; height:auto; overflow:scroll; max-height:1000px;'>";
         echo "<table style='text-align:center; border:3px solid #000;'>";
 
@@ -194,8 +208,6 @@ for ($i = 0; $i < count($gene_result_arr); $i++) {
         echo "<br />";
         echo "<br />";
     }
-
-
 }
 ?>
 

@@ -1,6 +1,10 @@
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"></link>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+</link>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
 <style>
     .ui-accordion-header.ui-state-active {
         background-color: green;
@@ -29,9 +33,16 @@ $chromosome = $_GET['chromosome'];
 $position = $_GET['position'];
 $genotype = $_GET['genotype'];
 
-$chromosome = trim($chromosome);
-$position = intval(trim($position));
-$genotype = trim($genotype);
+$chromosome = clean_malicious_input($chromosome);
+$chromosome = preg_replace('/\s+/', '', $chromosome);
+
+$position = clean_malicious_input($position);
+$position = preg_replace('/\s+/', '', $position);
+
+$genotype = clean_malicious_input($genotype);
+$genotype = preg_replace('/\s+/', '', $genotype);
+
+$position = abs(intval(preg_replace("/[^0-9.]/", "", $position)));
 ?>
 
 
@@ -138,7 +149,7 @@ echo "<input type=\"checkbox\" id=\"morphology_descriptor_28\" name=\"morphology
 echo "</div>";
 echo "<h3>Other Descriptor</h3>";
 echo "<div>";
-echo "<input type=\"checkbox\" id=\"other_descriptor_0\" name=\"other_descriptor_0\" value=\"ACIMPT\"><label for=\"other_descriptor_0\" style=\"margin-right:10px;\">ACIMPT</label>";
+// echo "<input type=\"checkbox\" id=\"other_descriptor_0\" name=\"other_descriptor_0\" value=\"ACIMPT\"><label for=\"other_descriptor_0\" style=\"margin-right:10px;\">ACIMPT</label>";
 echo "<input type=\"checkbox\" id=\"other_descriptor_1\" name=\"other_descriptor_1\" value=\"YIELD\"><label for=\"other_descriptor_1\" style=\"margin-right:10px;\">YIELD</label>";
 echo "<input type=\"checkbox\" id=\"other_descriptor_2\" name=\"other_descriptor_2\" value=\"FLUORESCE\"><label for=\"other_descriptor_2\" style=\"margin-right:10px;\">FLUORESCE</label>";
 echo "<input type=\"checkbox\" id=\"other_descriptor_3\" name=\"other_descriptor_3\" value=\"LATITUDE\"><label for=\"other_descriptor_3\" style=\"margin-right:10px;\">LATITUDE</label>";
@@ -196,9 +207,21 @@ echo "<div id=\"Variant_and_Phenotye_detail_table\" style='width:auto; height:au
 <script type="text/javascript" language="javascript" src="./js/viewVariantAndPhenotype.js"></script>
 
 <script type="text/javascript" language="javascript">
-    var chromosome = <?php if(isset($chromosome)) {echo json_encode($chromosome, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
-    var position = <?php if(isset($position)) {echo json_encode($position, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
-    var genotype = <?php if(isset($genotype)) {echo json_encode($genotype, JSON_INVALID_UTF8_IGNORE);} else {echo "";}?>;
+    var chromosome = <?php if (isset($chromosome)) {
+                            echo json_encode($chromosome, JSON_INVALID_UTF8_IGNORE);
+                        } else {
+                            echo "";
+                        } ?>;
+    var position = <?php if (isset($position)) {
+                        echo json_encode($position, JSON_INVALID_UTF8_IGNORE);
+                    } else {
+                        echo "";
+                    } ?>;
+    var genotype = <?php if (isset($genotype)) {
+                        echo json_encode($genotype, JSON_INVALID_UTF8_IGNORE);
+                    } else {
+                        echo "";
+                    } ?>;
 
     updateGenotypeInAccordion(genotype);
 </script>
